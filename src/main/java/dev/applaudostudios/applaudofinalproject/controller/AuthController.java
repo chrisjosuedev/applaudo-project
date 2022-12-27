@@ -3,7 +3,7 @@ package dev.applaudostudios.applaudofinalproject.controller;
 import dev.applaudostudios.applaudofinalproject.dto.auth.LoginReqDto;
 import dev.applaudostudios.applaudofinalproject.dto.auth.LoginResDto;
 import dev.applaudostudios.applaudofinalproject.dto.auth.TokenReqDto;
-import dev.applaudostudios.applaudofinalproject.dto.general.ResponseDto;
+import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseDto;
 import dev.applaudostudios.applaudofinalproject.service.imp.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

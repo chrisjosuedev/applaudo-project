@@ -1,4 +1,4 @@
-package dev.applaudostudios.applaudofinalproject.dto.general;
+package dev.applaudostudios.applaudofinalproject.dto.responses;
 
 import lombok.Builder;
 import lombok.Data;

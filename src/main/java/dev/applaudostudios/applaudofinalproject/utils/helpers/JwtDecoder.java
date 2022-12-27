@@ -1,6 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.utils.helpers;
 
-import dev.applaudostudios.applaudofinalproject.dto.general.UserDto;
+import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
 import org.slf4j.Logger;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
@@ -12,11 +12,11 @@ import java.util.Base64;
 public class JwtDecoder {
     private static final Logger logger = LoggerFactory.getLogger(JwtDecoder.class);
 
-    public UserDto decodeToJson(String token) {
+    public UserDto getUserInfo(String token) {
         String[] parts = token.split("\\.");
         JSONObject payload = new JSONObject(decode(parts[1]));
         return UserDto.builder()
-                .uuid(payload.getString("sid"))
+                .sid(payload.getString("sub"))
                 .firstName(getFirstName(payload))
                 .lastName(getLastName(payload))
                 .email(getEmail(payload))

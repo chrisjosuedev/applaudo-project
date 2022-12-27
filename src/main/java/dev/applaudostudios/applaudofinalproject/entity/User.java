@@ -17,22 +17,24 @@ public class User {
     Long id;
 
     @Column
-    private String uuid;
+    private String sid;
 
     @Column(name = "first_name")
-    @NotBlank(message = "First name is required.")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank(message = "Last name is required.")
     private String lastName;
 
     @Column
+    @NotBlank(message = "Username is required.")
     private String username;
 
     @Column
-    @Email(message = "Email must be in a valid format")
+    @Email(message = "Email must be in a valid format.")
     private String email;
+
+    @Column
+    private String telephone;
 
     public User() {}
 }

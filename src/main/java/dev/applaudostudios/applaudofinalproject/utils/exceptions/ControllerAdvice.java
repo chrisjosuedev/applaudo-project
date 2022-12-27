@@ -1,6 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.utils.exceptions;
 
-import dev.applaudostudios.applaudofinalproject.dto.general.ErrorDto;
+import dev.applaudostudios.applaudofinalproject.dto.responses.ErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -2,7 +2,7 @@ package dev.applaudostudios.applaudofinalproject.service.imp;
 
 import dev.applaudostudios.applaudofinalproject.dto.auth.LoginReqDto;
 import dev.applaudostudios.applaudofinalproject.dto.auth.LoginResDto;
-import dev.applaudostudios.applaudofinalproject.dto.general.ResponseDto;
+import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.auth.TokenReqDto;
 import dev.applaudostudios.applaudofinalproject.service.IUserService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
@@ -40,50 +40,59 @@ public class AuthService {
     private String logoutUrl;
 
     public LoginResDto login(LoginReqDto loginRequest) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("client_id", clientId);
+            map.add("client_secret", clientSecret);
+            map.add("grant_type", grantType);
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("client_id", clientId);
-        map.add("client_secret", clientSecret);
-        map.add("grant_type", grantType);
+            map.add("username", loginRequest.getUsername());
+            map.add("password", loginRequest.getPassword());
 
-        map.add("username", loginRequest.getUsername());
-        map.add("password", loginRequest.getPassword());
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
 
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
+            ResponseEntity<LoginResDto> response = restTemplate.postForEntity(
+                    tokenUrl,
+                    httpEntity,
+                    LoginResDto.class);
 
-        ResponseEntity<LoginResDto> response = restTemplate.postForEntity(
-                tokenUrl,
-                httpEntity,
-                LoginResDto.class);
+            userService.createUser(Objects.requireNonNull(response.getBody()).getAccess_token());
 
-        userService.createUser(Objects.requireNonNull(response.getBody()).getAccess_token());
-        return response.getBody();
-
+            return response.getBody();
+        } catch (RuntimeException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 
     public ResponseDto logout(TokenReqDto request) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("client_id", clientId);
-        map.add("client_secret", clientSecret);
-        map.add("refresh_token", request.getToken());
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("client_id", clientId);
+            map.add("client_secret", clientSecret);
+            map.add("refresh_token", request.getToken());
 
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
 
-        ResponseEntity<ResponseDto> response = restTemplate.postForEntity(logoutUrl, httpEntity, ResponseDto.class);
+            ResponseEntity<ResponseDto> response = restTemplate.postForEntity(logoutUrl, httpEntity, ResponseDto.class);
 
-        if(!response.getStatusCode().is2xxSuccessful()) {
-            throw new MyBusinessException("Logout fail.", HttpStatus.INTERNAL_SERVER_ERROR);
+            if(!response.getStatusCode().is2xxSuccessful()) {
+                throw new MyBusinessException("Logout fail.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            return ResponseDto.builder()
+                    .message("Logged out successfully")
+                    .httpStatus(HttpStatus.OK)
+                    .build();
+
+        } catch (RuntimeException ex) {
+            throw new RuntimeException(ex.getMessage());
         }
-
-        return ResponseDto.builder()
-                .message("Logged out successfully")
-                .httpStatus(HttpStatus.OK)
-                .build();
     }
+
 }

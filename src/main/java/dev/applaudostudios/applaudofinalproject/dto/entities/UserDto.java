@@ -1,4 +1,4 @@
-package dev.applaudostudios.applaudofinalproject.dto.general;
+package dev.applaudostudios.applaudofinalproject.dto.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class UserDto {
-    private String uuid;
+    private String sid;
     private String firstName;
     private String lastName;
     private String email;
