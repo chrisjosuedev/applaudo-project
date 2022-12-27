@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -13,9 +15,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
     @Column
     private String sid;
 
@@ -36,5 +35,21 @@ public class User {
     @Column
     private String telephone;
 
+    @Column
+    private boolean status;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Address> addresses = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Payment> payments = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<CartItemSession> cartItemSessions = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Order> orders = new HashSet<>();
+
     public User() {}
+
 }

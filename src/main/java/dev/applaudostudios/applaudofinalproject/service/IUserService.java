@@ -7,11 +7,11 @@ import java.util.List;
 public interface IUserService {
     List<User> findAll();
 
-    User findById(Long id);
+    User findById(String sid);
 
     void createUser(String token);
 
-    User updateUser(Long id, User user);
+    User updateUser(String sid, User user);
 
-    void deleteUser(Long id);
+    void deleteUser(String sid);
 }

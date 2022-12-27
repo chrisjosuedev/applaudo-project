@@ -48,6 +48,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                     .antMatchers("/auth/**").permitAll()
+                    .antMatchers("/actuator/health").permitAll()
                 .anyRequest()
                 .authenticated();
     }

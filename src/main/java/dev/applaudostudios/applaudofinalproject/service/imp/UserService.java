@@ -28,7 +28,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(String sid) {
         return null;
     }
 
@@ -46,6 +46,7 @@ public class UserService implements IUserService {
                     .email(userLogged.getEmail())
                     .username(userLogged.getUsername())
                     .telephone("")
+                    .status(true)
                     .build();
 
             userDao.save(newUser);
@@ -55,12 +56,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(String sid, User user) {
         return null;
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(String sid) {
 
     }
 }

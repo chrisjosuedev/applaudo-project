@@ -28,6 +28,12 @@ spring:
       ddl-auto: create
     show-sql: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, loggers
+
 keycloak:
   realm: applaudoauth
   auth-server-url: http://localhost:8180/auth
