@@ -1,0 +1,40 @@
+server:
+  port: 9090
+  servlet:
+    context-path: "/api/v1"
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          oauth2-client-credentials:
+            client-id: "applaudo-keycloack"
+            client-secret: ""
+            scope:
+              - "openid"
+            authorization-grant-type: "password"
+            provider: "keycloak"
+        provider:
+          keycloak:
+            token-uri: "http://localhost:8180/auth/realms/applaudoauth/protocol/openid-connect/token"
+  datasource:
+      url: "jdbc:mysql://localhost:3306/db_applaudo?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+      username: "root"
+      password: "admin"
+      driver-class-name: "com.mysql.cj.jdbc.Driver"
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+keycloak:
+  realm: applaudoauth
+  auth-server-url: http://localhost:8180/auth
+  resource: applaudo-keycloack
+  public-client: true
+  bearer-only: true
+
+variables:
+  logout:
+    uri: "http://localhost:8180/auth/realms/applaudoauth/protocol/openid-connect/logout"
