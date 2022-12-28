@@ -1,6 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.service.imp;
 
-import dev.applaudostudios.applaudofinalproject.dao.UserDao;
+import dev.applaudostudios.applaudofinalproject.repository.UserRepository;
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserUpdateDto;
 import dev.applaudostudios.applaudofinalproject.entity.User;
@@ -23,11 +23,11 @@ import java.util.Optional;
 public class UserService implements IUserService {
     private static final Logger logger = LoggerFactory.getLogger(JwtDecoder.class);
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Override
     public List<User> findAll(Integer limit, Integer from) {
-        List<User> allUsers = userDao.findAll();
+        List<User> allUsers = userRepository.findAll();
 
         if (limit == null || from == null) {
             return allUsers;
@@ -37,18 +37,18 @@ public class UserService implements IUserService {
             throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
         }
 
-        Page<User> usersPaginated = userDao.findAll(PageRequest.of(from, limit));
+        Page<User> usersPaginated = userRepository.findAll(PageRequest.of(from, limit));
         allUsers = usersPaginated.getContent();
         return allUsers;
     }
 
     private Optional<User> findById(String sid) {
-        return userDao.findBySid(sid);
+        return userRepository.findBySid(sid);
     }
 
     @Override
     public UserDto findByUsername(String username) {
-        Optional<User> userFound = userDao.findByUsername(username);
+        Optional<User> userFound = userRepository.findByUsername(username);
         if (userFound.isEmpty()) {
             throw new MyBusinessException("User not found with given username.", HttpStatus.NOT_FOUND);
         }
@@ -59,11 +59,11 @@ public class UserService implements IUserService {
     @Override
     public void createUser(String token) {
         UserDto userLogged = JwtDecoder.getUserInfo(token);
-        Optional<User> userFound = userDao.findBySid(userLogged.getSid());
+        Optional<User> userFound = userRepository.findBySid(userLogged.getSid());
 
         if (userFound.isEmpty()) {
             User newUser = userFromToken(userLogged);
-            userDao.save(newUser);
+            userRepository.save(newUser);
         }
 
         logger.info("User already exists, nothing added.");
@@ -81,7 +81,7 @@ public class UserService implements IUserService {
         userFound.get().setLastName(user.getLastName());
         userFound.get().setTelephone(user.getTelephone());
 
-        userDao.save(userFound.get());
+        userRepository.save(userFound.get());
 
         return userDtoResponse(userFound.get());
     }
@@ -95,7 +95,7 @@ public class UserService implements IUserService {
         }
 
         userFound.get().setStatus(false);
-        userDao.save(userFound.get());
+        userRepository.save(userFound.get());
 
         return Collections.emptyList();
     }

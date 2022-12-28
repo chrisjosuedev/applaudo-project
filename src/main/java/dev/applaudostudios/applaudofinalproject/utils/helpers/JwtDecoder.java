@@ -1,10 +1,13 @@
 package dev.applaudostudios.applaudofinalproject.utils.helpers;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 
+import java.security.Principal;
 import java.util.Base64;
 
 public class JwtDecoder {
@@ -21,6 +24,11 @@ public class JwtDecoder {
                 .telephone("")
                 .username(payload.getString("preferred_username"))
                 .build();
+    }
+
+    public static AccessToken userCredentials(Principal principal) {
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        return keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken();
     }
 
     private static String getFirstName(JSONObject payload) {

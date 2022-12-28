@@ -1,5 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,18 +31,19 @@ public class Product {
     private String description;
 
     @Column
+    @NotNull(message = "Stock is required")
     @Min(value = 1, message = "Min value to add is 1 product")
-    @NotBlank(message = "Stock is required")
     private int stock;
 
     @Column(name = "unit_price")
+    @NotNull(message = "Unit Price is required")
     @Positive(message = "Price must be greater than 0")
-    @NotBlank(message = "Price is required")
     private double unitPrice;
 
     @Column
     private boolean status;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<CartItemSession> cartItemSessions = new HashSet<>();
 

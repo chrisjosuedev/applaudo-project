@@ -26,17 +26,17 @@ public class Address {
 
     @Column
     @NotBlank(message = "City is required")
-    @Max(value = 80, message = "City Name only 50 characters allowed")
+    @Size(min = 2, max = 50, message = "Invalid City name length")
     private String city;
 
     @Column
     @NotBlank(message = "State is required")
-    @Max(value = 50, message = "State Name only 50 characters allowed")
+    @Size(min = 2, max = 50, message = "Invalid City name length")
     private String state;
 
     @Column
     @NotBlank(message = "Country is required")
-    @Max(value = 50, message = "Country Name only 50 characters allowed")
+    @Size(min = 2, max = 50, message = "Invalid City name length")
     private String country;
 
     @Column(name = "zip_code")

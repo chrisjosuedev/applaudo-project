@@ -6,14 +6,12 @@ import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
 import dev.applaudostudios.applaudofinalproject.entity.User;
 import dev.applaudostudios.applaudofinalproject.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -56,7 +54,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{sid}")
-    public ResponseEntity<Object> updateUser(@PathVariable("sid") String sid) {
+    public ResponseEntity<Object> deleteUser(@PathVariable("sid") String sid) {
         return ResponseHandler.responseBuilder("User removed successfully.",
                 HttpStatus.OK,
                 userService.deleteUser(sid));
