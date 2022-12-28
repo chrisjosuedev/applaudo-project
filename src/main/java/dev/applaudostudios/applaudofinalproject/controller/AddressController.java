@@ -55,7 +55,6 @@ public class AddressController {
                 addressService.findAddressById(id, username));
     }
 
-
     @PostMapping
     public ResponseEntity<Object> getAllAddresses(
             Principal principal, @Valid @RequestBody AddressDto addressDto) {
@@ -86,6 +85,5 @@ public class AddressController {
         return ResponseHandler.responseBuilder("Address removed successfully.",
                 HttpStatus.OK,
                 addressService.deleteAddress(id, username));
-
     }
 }

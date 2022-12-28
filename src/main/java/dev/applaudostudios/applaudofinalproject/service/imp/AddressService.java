@@ -49,25 +49,13 @@ public class AddressService implements IAddressService {
     @Override
     public Address findAddressById(Long id, String username) {
         User currentLoggedUser = findUserInSession(username);
-
-        Optional<Address> addressFound = addressRepository.findByIdAndUserSid(id, currentLoggedUser.getSid());
-
-        if (addressFound.isEmpty()) {
-            throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
-        }
-
-        return addressFound.get();
+        return findUserAddress(id, currentLoggedUser);
     }
 
     @Override
     public Address updateAddress(Long id, AddressDto addressDto, String username) {
         User currentLoggedUser = findUserInSession(username);
-
-        Optional<Address> addressFound = addressRepository.findByIdAndUserSid(id, currentLoggedUser.getSid());
-
-        if (addressFound.isEmpty()) {
-            throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
-        }
+        Address addressFound = findUserAddress(id, currentLoggedUser);
 
         Optional<Address> currentDefaultAddress = addressRepository.findAddress(currentLoggedUser.getSid());
 
@@ -76,16 +64,15 @@ public class AddressService implements IAddressService {
             addressRepository.save(currentDefaultAddress.get());
         }
 
-        addressFound.get().setStreet(addressDto.getStreet());
-        addressFound.get().setCity(addressDto.getCity());
-        addressFound.get().setState(addressDto.getState());
-        addressFound.get().setZipCode(addressDto.getZipCode());
-        addressFound.get().setDefault(addressDto.isDefault());
-        addressRepository.save(addressFound.get());
+        addressFound.setStreet(addressDto.getStreet());
+        addressFound.setCity(addressDto.getCity());
+        addressFound.setState(addressDto.getState());
+        addressFound.setZipCode(addressDto.getZipCode());
+        addressFound.setDefault(addressDto.isDefault());
+        addressRepository.save(addressFound);
 
-        return addressFound.get();
+        return addressFound;
     }
-
 
     @Override
     public Address createAddress(AddressDto addressDto, String username) {
@@ -108,15 +95,10 @@ public class AddressService implements IAddressService {
     @Override
     public List<Address> deleteAddress(Long id, String username) {
         User currentLoggedUser = findUserInSession(username);
+        Address addressFound = findUserAddress(id, currentLoggedUser);
 
-        Optional<Address> addressFound = addressRepository.findByIdAndUserSid(id, currentLoggedUser.getSid());
-
-        if (addressFound.isEmpty()) {
-            throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
-        }
-
-        addressFound.get().setStatus(false);
-        addressRepository.save(addressFound.get());
+        addressFound.setStatus(false);
+        addressRepository.save(addressFound);
 
         return Collections.emptyList();
     }
@@ -129,6 +111,16 @@ public class AddressService implements IAddressService {
         }
 
         return currentLoggedUser.get();
+    }
+
+    private Address findUserAddress(Long id, User loggedUser) {
+        Optional<Address> addressFound = addressRepository.findByIdAndUserSid(id, loggedUser.getSid());
+
+        if (addressFound.isEmpty()) {
+            throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
+        }
+
+        return addressFound.get();
     }
 
     private Address addressFromDto(AddressDto addressDto) {
