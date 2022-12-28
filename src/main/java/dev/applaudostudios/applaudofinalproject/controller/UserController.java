@@ -1,7 +1,9 @@
 package dev.applaudostudios.applaudofinalproject.controller;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserUpdateDto;
+import dev.applaudostudios.applaudofinalproject.dto.responses.PagResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
+import dev.applaudostudios.applaudofinalproject.entity.User;
 import dev.applaudostudios.applaudofinalproject.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -21,8 +25,20 @@ public class UserController {
 
     @RolesAllowed("ADMIN")
     @GetMapping
-    public ResponseEntity<Object> findAllUsers() {
-        return ResponseHandler.responseBuilder("Active users.", HttpStatus.OK, userService.findAll());
+    public ResponseEntity<Object> findAllUsers(
+            @RequestParam(required = false, name = "limit")
+            Integer limit,
+            @RequestParam(required = false, name = "from")
+            Integer from
+    ) {
+        List<User> usersList = userService.findAll(limit, from);
+        return ResponseHandler.responseBuilder("Users registered.",
+                HttpStatus.OK,
+                PagResponseDto.<User>builder()
+                        .count(usersList.size())
+                        .listFound(usersList)
+                        .build()
+        );
     }
 
     @GetMapping("/username/{username}")

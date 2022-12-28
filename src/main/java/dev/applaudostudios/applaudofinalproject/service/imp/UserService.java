@@ -10,6 +10,8 @@ import dev.applaudostudios.applaudofinalproject.utils.helpers.JwtDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +26,20 @@ public class UserService implements IUserService {
     private UserDao userDao;
 
     @Override
-    public List<User> findAll() {
-        /**
-         * TODO:
-         * Pagination
-         */
-        return userDao.findAll();
+    public List<User> findAll(Integer limit, Integer from) {
+        List<User> allUsers = userDao.findAll();
+
+        if (limit == null || from == null) {
+            return allUsers;
+        }
+
+        if (limit < 0 || from < 0) {
+            throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
+        }
+
+        Page<User> usersPaginated = userDao.findAll(PageRequest.of(from, limit));
+        allUsers = usersPaginated.getContent();
+        return allUsers;
     }
 
     private Optional<User> findById(String sid) {

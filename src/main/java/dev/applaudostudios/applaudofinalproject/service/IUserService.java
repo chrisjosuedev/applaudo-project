@@ -7,7 +7,7 @@ import dev.applaudostudios.applaudofinalproject.entity.User;
 import java.util.List;
 
 public interface IUserService {
-    List<User> findAll();
+    List<User> findAll(Integer limit, Integer from);
 
     UserDto findByUsername(String username);
 
