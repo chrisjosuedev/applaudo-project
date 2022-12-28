@@ -36,6 +36,9 @@ public class Payment {
     @Column(name = "is_default")
     private boolean isDefault;
 
+    @Column
+    private boolean status;
+
     @OneToOne(optional = false)
     private PaymentType type;
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.naming.AuthenticationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +33,22 @@ public class ControllerAdvice {
         listOfRuntimeErrors.add(ex.getMessage());
         ErrorDto err = ErrorDto.builder()
                 .errors(listOfRuntimeErrors)
-                .httpStatus(HttpStatus.BAD_REQUEST)
+                .httpStatus(HttpStatus.FORBIDDEN)
                 .build();
 
-        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(err, err.getHttpStatus());
+    }
+
+    @ExceptionHandler(value = AuthenticationException.class)
+    public ResponseEntity<ErrorDto> authenticationExceptionExceptionHandler(Exception ex) {
+        List<String> listOfAuthErrors = new ArrayList<>();
+        listOfAuthErrors.add(ex.getMessage());
+        ErrorDto err = ErrorDto.builder()
+                .errors(listOfAuthErrors)
+                .httpStatus(HttpStatus.UNAUTHORIZED)
+                .build();
+
+        return new ResponseEntity<>(err, err.getHttpStatus());
     }
 
     @ExceptionHandler(value = HttpClientErrorException.Unauthorized.class)

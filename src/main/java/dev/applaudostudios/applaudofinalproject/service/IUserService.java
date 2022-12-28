@@ -1,5 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.service;
 
+import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
+import dev.applaudostudios.applaudofinalproject.dto.entities.UserUpdateDto;
 import dev.applaudostudios.applaudofinalproject.entity.User;
 
 import java.util.List;
@@ -7,11 +9,11 @@ import java.util.List;
 public interface IUserService {
     List<User> findAll();
 
-    User findById(String sid);
+    UserDto findByUsername(String username);
 
     void createUser(String token);
 
-    User updateUser(String sid, User user);
+    UserDto updateUser(String sid, UserUpdateDto user);
 
-    void deleteUser(String sid);
+    List<User> deleteUser(String sid);
 }

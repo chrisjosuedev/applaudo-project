@@ -44,3 +44,5 @@ keycloak:
 variables:
   logout:
     uri: "http://localhost:8180/auth/realms/applaudoauth/protocol/openid-connect/logout"
+  TWILIO_ACCOUNT_SID: "AC6b743480d616119c6d1b9f4847a4d863"
+  TWILIO_AUTH_TOKEN: "2f2870f50566835c35f825f6a73c457f"

@@ -47,6 +47,9 @@ public class Address {
     @Column(name = "is_default")
     private boolean isDefault;
 
+    @Column
+    private boolean status;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;

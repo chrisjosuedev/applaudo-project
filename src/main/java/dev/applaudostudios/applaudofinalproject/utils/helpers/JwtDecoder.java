@@ -4,15 +4,13 @@ import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
 import org.slf4j.Logger;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
-@Component
 public class JwtDecoder {
     private static final Logger logger = LoggerFactory.getLogger(JwtDecoder.class);
 
-    public UserDto getUserInfo(String token) {
+    public static UserDto getUserInfo(String token) {
         String[] parts = token.split("\\.");
         JSONObject payload = new JSONObject(decode(parts[1]));
         return UserDto.builder()
@@ -20,6 +18,7 @@ public class JwtDecoder {
                 .firstName(getFirstName(payload))
                 .lastName(getLastName(payload))
                 .email(getEmail(payload))
+                .telephone("")
                 .username(payload.getString("preferred_username"))
                 .build();
     }

@@ -40,31 +40,28 @@ public class AuthService {
     private String logoutUrl;
 
     public LoginResDto login(LoginReqDto loginRequest) {
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("client_id", clientId);
-            map.add("client_secret", clientSecret);
-            map.add("grant_type", grantType);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-            map.add("username", loginRequest.getUsername());
-            map.add("password", loginRequest.getPassword());
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("client_id", clientId);
+        map.add("client_secret", clientSecret);
+        map.add("grant_type", grantType);
 
-            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
+        map.add("username", loginRequest.getUsername());
+        map.add("password", loginRequest.getPassword());
 
-            ResponseEntity<LoginResDto> response = restTemplate.postForEntity(
-                    tokenUrl,
-                    httpEntity,
-                    LoginResDto.class);
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
 
-            userService.createUser(Objects.requireNonNull(response.getBody()).getAccess_token());
+        ResponseEntity<LoginResDto> response = restTemplate.postForEntity(
+                tokenUrl,
+                httpEntity,
+                LoginResDto.class);
 
-            return response.getBody();
-        } catch (RuntimeException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        userService.createUser(Objects.requireNonNull(response.getBody()).getAccess_token());
+
+        return response.getBody();
     }
 
     public ResponseDto logout(TokenReqDto request) {
