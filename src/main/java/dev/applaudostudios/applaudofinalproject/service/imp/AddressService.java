@@ -8,7 +8,6 @@ import dev.applaudostudios.applaudofinalproject.repository.UserRepository;
 import dev.applaudostudios.applaudofinalproject.service.IAddressService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -40,8 +39,9 @@ public class AddressService implements IAddressService {
             throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
         }
 
-        Page<Address> addressesPaginated = addressRepository.findAll(PageRequest.of(from, limit));
-        allAddress = addressesPaginated.getContent();
+        allAddress = addressRepository.findAllByUserSid(
+                currentLoggedUser.getSid(),
+                PageRequest.of(from, limit));
 
         return allAddress;
     }

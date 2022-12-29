@@ -1,6 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.repository;
 
 import dev.applaudostudios.applaudofinalproject.entity.Address;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,6 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     List<Address> findAllByUserSid(String sid);
 
     Optional<Address> findByIdAndUserSid(Long id, String sid);
+
+    List<Address> findAllByUserSid(String sid, Pageable pageable);
 }

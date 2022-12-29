@@ -7,8 +7,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -45,7 +45,7 @@ public class Product {
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<CartItemSession> cartItemSessions = new HashSet<>();
+    private List<CartItemSession> cartItemSessions = new ArrayList<>();
 
     public Product(){}
 

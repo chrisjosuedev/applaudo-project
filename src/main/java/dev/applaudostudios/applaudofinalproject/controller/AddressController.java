@@ -26,15 +26,15 @@ public class AddressController {
     @GetMapping
     public ResponseEntity<Object> findAllProducts(
             Principal principal,
-            @RequestParam(required = false, name = "limit")
-            Integer limit,
             @RequestParam(required = false, name = "from")
-            Integer from
+            Integer from,
+            @RequestParam(required = false, name = "limit")
+            Integer limit
     ) {
         AccessToken accessToken = JwtDecoder.userCredentials(principal);
         String username = accessToken.getPreferredUsername();
 
-        List<Address> allAddresses = addressService.findAll(limit, from, username);
+        List<Address> allAddresses = addressService.findAll(from, limit, username);
 
         return ResponseHandler.responseBuilder(
                 "All addresses registered.",

@@ -39,7 +39,9 @@ public class Payment {
     @Column
     private boolean status;
 
-    @OneToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "type_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private PaymentType type;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

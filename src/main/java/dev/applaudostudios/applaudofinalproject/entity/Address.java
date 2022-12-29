@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -51,6 +50,7 @@ public class Address {
     private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_sid")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
