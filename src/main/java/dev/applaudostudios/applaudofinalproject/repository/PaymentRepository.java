@@ -12,10 +12,7 @@ import java.util.Optional;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT u FROM Payment u WHERE u.isDefault = true AND u.user.sid = ?1")
     Optional<Payment> findPayment(String sid);
-
-    List<Payment> findAllByUserSid(String sid);
-
-    List<Payment> findAllByUserSid(String sid, Pageable pageable);
-
-    Optional<Payment> findByIdAndUserSid(Long id, String sid);
+    List<Payment> findAllByUserSidAndStatusIsTrue(String sid);
+    Optional<Payment> findByIdAndStatusIsTrueAndUserSid(Long id, String sid);
+    List<Payment> findAllByUserSidAndStatusIsTrue(String sid, Pageable pageable);
 }

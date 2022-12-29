@@ -14,9 +14,9 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("SELECT u FROM Address u WHERE u.isDefault = true AND u.user.sid = ?1")
     Optional<Address> findAddress(String sid);
 
-    List<Address> findAllByUserSid(String sid);
+    List<Address> findAllByUserSidAndStatusIsTrue(String username);
 
-    Optional<Address> findByIdAndUserSid(Long id, String sid);
+    Optional<Address> findByIdAndStatusIsTrueAndUserSid(Long id, String sid);
 
-    List<Address> findAllByUserSid(String sid, Pageable pageable);
+    List<Address> findAllByUserSidAndStatusIsTrue(String sid, Pageable pageable);
 }

@@ -35,7 +35,7 @@ public class PaymentService implements IPaymentService {
     public List<Payment> findAll(Integer from, Integer limit, String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
 
-        List<Payment> allPayments = paymentRepository.findAllByUserSid(currentLoggedUser.getSid());
+        List<Payment> allPayments = paymentRepository.findAllByUserSidAndStatusIsTrue(currentLoggedUser.getSid());
 
         if (limit == null || from == null) {
             return allPayments;
@@ -45,7 +45,7 @@ public class PaymentService implements IPaymentService {
             throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
         }
 
-        allPayments = paymentRepository.findAllByUserSid(
+        allPayments = paymentRepository.findAllByUserSidAndStatusIsTrue(
                 currentLoggedUser.getSid(),
                 PageRequest.of(from, limit));
 
@@ -114,7 +114,7 @@ public class PaymentService implements IPaymentService {
     }
 
     private Payment findUserPayment(Long id, User loggedUser) {
-        Optional<Payment> paymentFound = paymentRepository.findByIdAndUserSid(id, loggedUser.getSid());
+        Optional<Payment> paymentFound = paymentRepository.findByIdAndStatusIsTrueAndUserSid(id, loggedUser.getSid());
 
         if (paymentFound.isEmpty()) {
             throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);

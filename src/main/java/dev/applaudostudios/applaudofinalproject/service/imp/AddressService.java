@@ -29,7 +29,7 @@ public class AddressService implements IAddressService {
     public List<Address> findAll(Integer from, Integer limit, String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
 
-        List<Address> allAddress = addressRepository.findAllByUserSid(currentLoggedUser.getSid());
+        List<Address> allAddress = addressRepository.findAllByUserSidAndStatusIsTrue(currentLoggedUser.getSid());
 
         if (limit == null || from == null) {
             return allAddress;
@@ -39,7 +39,7 @@ public class AddressService implements IAddressService {
             throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
         }
 
-        allAddress = addressRepository.findAllByUserSid(
+        allAddress = addressRepository.findAllByUserSidAndStatusIsTrue(
                 currentLoggedUser.getSid(),
                 PageRequest.of(from, limit));
 
@@ -104,7 +104,7 @@ public class AddressService implements IAddressService {
     }
 
     private Address findUserAddress(Long id, User loggedUser) {
-        Optional<Address> addressFound = addressRepository.findByIdAndUserSid(id, loggedUser.getSid());
+        Optional<Address> addressFound = addressRepository.findByIdAndStatusIsTrueAndUserSid(id, loggedUser.getSid());
 
         if (addressFound.isEmpty()) {
             throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
