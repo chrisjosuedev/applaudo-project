@@ -6,7 +6,6 @@ import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
 import dev.applaudostudios.applaudofinalproject.entity.Address;
 import dev.applaudostudios.applaudofinalproject.service.IAddressService;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.JwtDecoder;
-import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
