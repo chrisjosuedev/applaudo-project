@@ -6,7 +6,6 @@ import dev.applaudostudios.applaudofinalproject.entity.Product;
 import dev.applaudostudios.applaudofinalproject.service.IProductService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> findAll(Integer limit, Integer from) {
-        List<Product> allProducts = productRepository.findAll();
+        List<Product> allProducts = productRepository.findAllByStatusIsTrue();
 
         if (limit == null || from == null) {
             return allProducts;
@@ -32,9 +31,7 @@ public class ProductService implements IProductService {
             throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
         }
 
-        Page<Product> productsPaginated = productRepository.findAll(PageRequest.of(from, limit));
-        allProducts = productsPaginated.getContent();
-
+        allProducts = productRepository.findAllByStatusIsTrue(PageRequest.of(from, limit));
         return allProducts;
     }
 

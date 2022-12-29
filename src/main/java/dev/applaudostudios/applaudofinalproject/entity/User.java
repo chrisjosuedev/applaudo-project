@@ -44,7 +44,7 @@ public class User {
     private List<Payment> payments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<CartItemSession> cartItemSessions = new ArrayList<>();
+    private List<CartItemSession> cartItemSession = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();

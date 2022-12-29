@@ -25,6 +25,7 @@ public class CartItemSession {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
