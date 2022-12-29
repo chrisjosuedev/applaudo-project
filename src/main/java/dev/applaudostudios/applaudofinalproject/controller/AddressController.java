@@ -31,8 +31,7 @@ public class AddressController {
             @RequestParam(required = false, name = "limit")
             Integer limit
     ) {
-        AccessToken accessToken = JwtDecoder.userCredentials(principal);
-        String username = accessToken.getPreferredUsername();
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
 
         List<Address> allAddresses = addressService.findAll(from, limit, username);
 
@@ -48,8 +47,7 @@ public class AddressController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getAddressById(Principal principal,
                                                 @PathVariable("id") Long id) {
-        AccessToken accessToken = JwtDecoder.userCredentials(principal);
-        String username = accessToken.getPreferredUsername();
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
         return ResponseHandler.responseBuilder("Address found.",
                 HttpStatus.OK,
                 addressService.findAddressById(id, username));
@@ -58,8 +56,7 @@ public class AddressController {
     @PostMapping
     public ResponseEntity<Object> getAllAddresses(
             Principal principal, @Valid @RequestBody AddressDto addressDto) {
-        AccessToken accessToken = JwtDecoder.userCredentials(principal);
-        String username = accessToken.getPreferredUsername();
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
         return ResponseHandler.responseBuilder("Address created successfully.",
                 HttpStatus.OK,
                 addressService.createAddress(addressDto, username));
@@ -69,8 +66,7 @@ public class AddressController {
     public ResponseEntity<Object> updateAddress(Principal principal,
                                                 @PathVariable("id") Long id,
                                                 @Valid @RequestBody AddressDto addressDto) {
-        AccessToken accessToken = JwtDecoder.userCredentials(principal);
-        String username = accessToken.getPreferredUsername();
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
         return ResponseHandler.responseBuilder("Address updated successfully.",
                 HttpStatus.OK,
                 addressService.updateAddress(id, addressDto, username));
@@ -80,8 +76,7 @@ public class AddressController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAddress(Principal principal,
                                                 @PathVariable("id") Long id) {
-        AccessToken accessToken = JwtDecoder.userCredentials(principal);
-        String username = accessToken.getPreferredUsername();
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
         return ResponseHandler.responseBuilder("Address removed successfully.",
                 HttpStatus.OK,
                 addressService.deleteAddress(id, username));

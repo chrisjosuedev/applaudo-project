@@ -7,9 +7,9 @@ import dev.applaudostudios.applaudofinalproject.entity.PaymentType;
 import dev.applaudostudios.applaudofinalproject.entity.User;
 import dev.applaudostudios.applaudofinalproject.repository.PaymentRepository;
 import dev.applaudostudios.applaudofinalproject.repository.PaymentTypeRepository;
-import dev.applaudostudios.applaudofinalproject.repository.UserRepository;
 import dev.applaudostudios.applaudofinalproject.service.IPaymentService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.InfoCredential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class PaymentService implements IPaymentService {
 
     @Autowired
-    private UserRepository userRepository;
+    private InfoCredential infoCredential;
 
     @Autowired
     private PaymentTypeRepository paymentTypeRepository;
@@ -33,7 +33,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public List<Payment> findAll(Integer from, Integer limit, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
 
         List<Payment> allPayments = paymentRepository.findAllByUserSid(currentLoggedUser.getSid());
 
@@ -54,7 +54,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment createPayment(PaymentDto paymentDto, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
         PaymentType typeFound = findPaymentType(paymentDto.getType().getId());
 
         paymentDto.setUser(currentLoggedUser);
@@ -75,7 +75,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment updatePayment(Long id, PaymentDto paymentDto, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
         PaymentType typeFound = findPaymentType(paymentDto.getType().getId());
         Payment paymentFound = findUserPayment(id, currentLoggedUser);
 
@@ -98,13 +98,13 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment findPaymentById(Long id, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
         return findUserPayment(id, currentLoggedUser);
     }
 
     @Override
     public List<Payment> deletePayment(Long id, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
         Payment paymentFound = findUserPayment(id, currentLoggedUser);
 
         paymentFound.setStatus(false);
@@ -121,14 +121,6 @@ public class PaymentService implements IPaymentService {
         }
 
         return paymentFound.get();
-    }
-
-    private User findUserInSession(String username) {
-        Optional<User> currentLoggedUser = userRepository.findByUsername(username);
-        if (currentLoggedUser.isEmpty()) {
-            throw new MyBusinessException("Current user doesn't exists or session is invalid.", HttpStatus.FORBIDDEN);
-        }
-        return currentLoggedUser.get();
     }
 
     private PaymentType findPaymentType(Long id) {

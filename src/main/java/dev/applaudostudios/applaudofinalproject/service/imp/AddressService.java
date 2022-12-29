@@ -4,9 +4,9 @@ import dev.applaudostudios.applaudofinalproject.dto.entities.AddressDto;
 import dev.applaudostudios.applaudofinalproject.entity.Address;
 import dev.applaudostudios.applaudofinalproject.entity.User;
 import dev.applaudostudios.applaudofinalproject.repository.AddressRepository;
-import dev.applaudostudios.applaudofinalproject.repository.UserRepository;
 import dev.applaudostudios.applaudofinalproject.service.IAddressService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.InfoCredential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -23,11 +23,11 @@ public class AddressService implements IAddressService {
     private AddressRepository addressRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private InfoCredential infoCredential;
 
     @Override
     public List<Address> findAll(Integer from, Integer limit, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
 
         List<Address> allAddress = addressRepository.findAllByUserSid(currentLoggedUser.getSid());
 
@@ -48,13 +48,13 @@ public class AddressService implements IAddressService {
 
     @Override
     public Address findAddressById(Long id, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
         return findUserAddress(id, currentLoggedUser);
     }
 
     @Override
     public Address updateAddress(Long id, AddressDto addressDto, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
         Address addressFound = findUserAddress(id, currentLoggedUser);
 
         Optional<Address> currentDefaultAddress = addressRepository.findAddress(currentLoggedUser.getSid());
@@ -76,7 +76,7 @@ public class AddressService implements IAddressService {
 
     @Override
     public Address createAddress(AddressDto addressDto, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
 
         addressDto.setUser(currentLoggedUser);
         Address newAddress = addressFromDto(addressDto);
@@ -94,23 +94,13 @@ public class AddressService implements IAddressService {
 
     @Override
     public List<Address> deleteAddress(Long id, String username) {
-        User currentLoggedUser = findUserInSession(username);
+        User currentLoggedUser = infoCredential.findUserInSession(username);
         Address addressFound = findUserAddress(id, currentLoggedUser);
 
         addressFound.setStatus(false);
         addressRepository.save(addressFound);
 
         return Collections.emptyList();
-    }
-
-    private User findUserInSession(String username) {
-        Optional<User> currentLoggedUser = userRepository.findByUsername(username);
-
-        if (currentLoggedUser.isEmpty()) {
-            throw new MyBusinessException("Current user doesn't exists or session is invalid.", HttpStatus.FORBIDDEN);
-        }
-
-        return currentLoggedUser.get();
     }
 
     private Address findUserAddress(Long id, User loggedUser) {
