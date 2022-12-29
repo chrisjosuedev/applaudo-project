@@ -23,7 +23,6 @@ public class PaymentController {
     @Autowired
     private IPaymentService paymentService;
 
-
     @GetMapping
     public ResponseEntity<Object> findAllPayments(
             Principal principal,
@@ -46,6 +45,17 @@ public class PaymentController {
                         .build());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> findPaymentById(Principal principal,
+                                                  @PathVariable("id") Long id) {
+        AccessToken accessToken = JwtDecoder.userCredentials(principal);
+        String username = accessToken.getPreferredUsername();
+        return ResponseHandler.responseBuilder("Payment Found.",
+                HttpStatus.OK,
+                paymentService.findPaymentById(id, username));
+
+    }
+
     @PostMapping
     public ResponseEntity<Object> createPayment(
             Principal principal, @Valid @RequestBody PaymentDto paymentDto) {
@@ -55,5 +65,28 @@ public class PaymentController {
                 HttpStatus.OK,
                 paymentService.createPayment(paymentDto, username));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updatePayment(Principal principal,
+                                                @PathVariable("id") Long id,
+                                                @Valid @RequestBody PaymentDto paymentDto) {
+        AccessToken accessToken = JwtDecoder.userCredentials(principal);
+        String username = accessToken.getPreferredUsername();
+        return ResponseHandler.responseBuilder("Payment updated successfully.",
+                HttpStatus.OK,
+                paymentService.updatePayment(id, paymentDto, username));
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletePayment(Principal principal,
+                                                @PathVariable("id") Long id) {
+        AccessToken accessToken = JwtDecoder.userCredentials(principal);
+        String username = accessToken.getPreferredUsername();
+        return ResponseHandler.responseBuilder("Payment removed successfully.",
+                HttpStatus.OK,
+                paymentService.deletePayment(id, username));
+    }
+
 
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +71,56 @@ public class PaymentService implements IPaymentService {
         paymentRepository.save(newPayment);
 
         return newPayment;
+    }
+
+    @Override
+    public Payment updatePayment(Long id, PaymentDto paymentDto, String username) {
+        User currentLoggedUser = findUserInSession(username);
+        PaymentType typeFound = findPaymentType(paymentDto.getType().getId());
+        Payment paymentFound = findUserPayment(id, currentLoggedUser);
+
+
+        Optional<Payment> currentDefaultPayment = paymentRepository.findPayment(currentLoggedUser.getSid());
+        if(paymentDto.isDefault() && currentDefaultPayment.isPresent()) {
+            currentDefaultPayment.get().setDefault(false);
+            paymentRepository.save(currentDefaultPayment.get());
+        }
+
+        paymentFound.setCcExpirationDate(paymentDto.getCcExpirationDate());
+        paymentFound.setProvider(paymentDto.getProvider());
+        paymentFound.setCcNumber(paymentDto.getCcNumber());
+        paymentFound.setDefault(paymentFound.isDefault());
+        paymentFound.setType(typeFound);
+        paymentRepository.save(paymentFound);
+
+        return paymentFound;
+    }
+
+    @Override
+    public Payment findPaymentById(Long id, String username) {
+        User currentLoggedUser = findUserInSession(username);
+        return findUserPayment(id, currentLoggedUser);
+    }
+
+    @Override
+    public List<Payment> deletePayment(Long id, String username) {
+        User currentLoggedUser = findUserInSession(username);
+        Payment paymentFound = findUserPayment(id, currentLoggedUser);
+
+        paymentFound.setStatus(false);
+        paymentRepository.save(paymentFound);
+
+        return Collections.emptyList();
+    }
+
+    private Payment findUserPayment(Long id, User loggedUser) {
+        Optional<Payment> paymentFound = paymentRepository.findByIdAndUserSid(id, loggedUser.getSid());
+
+        if (paymentFound.isEmpty()) {
+            throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
+        }
+
+        return paymentFound.get();
     }
 
     private User findUserInSession(String username) {
