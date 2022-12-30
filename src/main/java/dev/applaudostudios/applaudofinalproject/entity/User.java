@@ -1,5 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -43,6 +44,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CartItemSession> cartItemSession = new ArrayList<>();
 

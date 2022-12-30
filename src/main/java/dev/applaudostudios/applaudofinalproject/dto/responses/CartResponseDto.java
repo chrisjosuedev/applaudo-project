@@ -14,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CartResponseDto {
     private Integer numberOfItems;
-    private List<ICheckoutResponseDto> myCart;
     private double total;
+    private List<ICheckoutResponseDto> myCart;
 }

@@ -5,7 +5,7 @@ import dev.applaudostudios.applaudofinalproject.dto.responses.CartResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.CheckoutResponseDto;
 
 public interface ICheckoutService {
-    CheckoutResponseDto addItemToCart(CheckoutDto checkoutDto, String username);
     CartResponseDto findMyCart(String username);
-
+    CheckoutResponseDto addItemToCart(CheckoutDto checkoutDto, String username);
+    CheckoutResponseDto updateCheckout(Long productId, Integer quantity, String username);
 }

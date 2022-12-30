@@ -20,8 +20,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @Transactional
+@Service
 public class CheckoutService implements ICheckoutService {
 
     @Autowired
@@ -60,10 +60,32 @@ public class CheckoutService implements ICheckoutService {
     }
 
     @Override
+    public CheckoutResponseDto updateCheckout(Long productId, Integer quantity, String username) {
+        User currentLoggedUser = infoCredential.findUserInSession(username);
+        Product product = findProduct(productId, quantity);
+
+        Optional<CartItemSession> cartProductFound = checkoutRepository
+                .findByProductIdAndUserSid(productId, currentLoggedUser.getSid());
+
+        if (cartProductFound.isEmpty()) {
+            throw new MyBusinessException("User doesn't have an item in the cart with given id", HttpStatus.BAD_REQUEST);
+        }
+
+        if (quantity <= 0) {
+            throw new MyBusinessException("Quantity must be greater than 0.", HttpStatus.BAD_REQUEST);
+        }
+
+        // Si al actualizar, el valor es 0 o menor, eliminar elemento del carrito y return null
+
+        return null;
+    }
+
+    @Override
     public CartResponseDto findMyCart(String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
         List<ICheckoutResponseDto> myCart = checkoutRepository.getCartInformation(currentLoggedUser.getSid());
-        return myCartInformation(myCart);
+        Double totalCart = checkoutRepository.getCartTotal(currentLoggedUser.getSid());
+        return myCartInformation(myCart, totalCart);
     }
 
     private Product findProduct(Long id, int quantity) {
@@ -78,17 +100,11 @@ public class CheckoutService implements ICheckoutService {
         return productFound.get();
     }
 
-    private CartResponseDto myCartInformation(List<ICheckoutResponseDto> myCart) {
-        /**
-         * TODO:
-         * Calcular suma de elementos del carrito.
-         */
-
-
+    private CartResponseDto myCartInformation(List<ICheckoutResponseDto> myCart, Double total) {
         return CartResponseDto.builder()
                 .numberOfItems(myCart.size())
                 .myCart(myCart)
-                .total(89.32)
+                .total((total == null) ? 0.00 : total)
                 .build();
     }
 

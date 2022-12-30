@@ -14,5 +14,8 @@ public interface CheckoutRepository extends JpaRepository<CartItemSession, Long>
     @Query("SELECT p.productName as productName, p.unitPrice as unitPrice, (p.unitPrice * c.quantity) as subTotal, c.quantity as quantity FROM CartItemSession c JOIN c.product p WHERE c.user.sid = ?1")
     List<ICheckoutResponseDto> getCartInformation(String sid);
 
+    @Query("SELECT SUM(p.unitPrice * c.quantity) FROM CartItemSession c JOIN c.product p WHERE c.user.sid = ?1")
+    Double getCartTotal(String sid);
+
     Optional<CartItemSession> findByProductIdAndUserSid(Long id, String username);
 }
