@@ -7,6 +7,7 @@ import dev.applaudostudios.applaudofinalproject.entity.User;
 import dev.applaudostudios.applaudofinalproject.service.IUserService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.JwtDecoder;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,9 @@ public class UserService implements IUserService {
     private static final Logger logger = LoggerFactory.getLogger(JwtDecoder.class);
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ObjectNull objectNull;
 
     @Override
     public List<User> findAll(Integer limit, Integer from) {
@@ -87,7 +89,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> deleteUser(String sid) {
+    public Object deleteUser(String sid) {
         Optional<User> userFound = findById(sid);
 
         if (userFound.isEmpty()) {
@@ -97,7 +99,7 @@ public class UserService implements IUserService {
         userFound.get().setStatus(false);
         userRepository.save(userFound.get());
 
-        return Collections.emptyList();
+        return objectNull.getObjectNull();
     }
 
     private UserDto userDtoResponse(User user) {

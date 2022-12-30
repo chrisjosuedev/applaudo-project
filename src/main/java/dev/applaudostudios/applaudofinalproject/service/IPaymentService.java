@@ -9,5 +9,5 @@ public interface IPaymentService {
     Payment createPayment(PaymentDto paymentDto, String username);
     Payment updatePayment(Long id, PaymentDto paymentDto, String username);
     Payment findPaymentById(Long id, String username);
-    List<Payment> deletePayment(Long id, String username);
+    Object deletePayment(Long id, String username);
 }

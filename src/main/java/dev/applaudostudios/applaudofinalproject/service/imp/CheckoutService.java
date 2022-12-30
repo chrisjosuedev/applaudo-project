@@ -4,6 +4,7 @@ import dev.applaudostudios.applaudofinalproject.dto.entities.CheckoutDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.CartResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.CheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ICheckoutResponseDto;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
 import dev.applaudostudios.applaudofinalproject.entity.CartItemSession;
 import dev.applaudostudios.applaudofinalproject.entity.Product;
 import dev.applaudostudios.applaudofinalproject.entity.User;
@@ -33,6 +34,9 @@ public class CheckoutService implements ICheckoutService {
     @Autowired
     private InfoCredential infoCredential;
 
+    @Autowired
+    private ObjectNull objectNull;
+
     @Override
     public CheckoutResponseDto addItemToCart(CheckoutDto checkoutDto, String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
@@ -53,31 +57,25 @@ public class CheckoutService implements ICheckoutService {
         checkoutRepository.save(newCartItem);
 
         // Update Stock
-        product.setStock(product.getStock()  - newCartItem.getQuantity());
+        product.setStock(product.getStock() - newCartItem.getQuantity());
         productRepository.save(product);
 
         return cartResponse(newCartItem);
     }
 
     @Override
-    public CheckoutResponseDto updateCheckout(Long productId, Integer quantity, String username) {
+    public Object updateCheckout(Long productId, Integer quantity, String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
-        Product product = findProduct(productId, quantity);
-
         Optional<CartItemSession> cartProductFound = checkoutRepository
                 .findByProductIdAndUserSid(productId, currentLoggedUser.getSid());
 
         if (cartProductFound.isEmpty()) {
-            throw new MyBusinessException("User doesn't have an item in the cart with given id", HttpStatus.BAD_REQUEST);
+            throw new MyBusinessException("User doesn't have a product in the cart with given id", HttpStatus.BAD_REQUEST);
         }
 
-        if (quantity <= 0) {
-            throw new MyBusinessException("Quantity must be greater than 0.", HttpStatus.BAD_REQUEST);
-        }
+        Product product = findProduct(productId, quantity);
 
-        // Si al actualizar, el valor es 0 o menor, eliminar elemento del carrito y return null
-
-        return null;
+        return objectNull.getObjectNull();
     }
 
     @Override

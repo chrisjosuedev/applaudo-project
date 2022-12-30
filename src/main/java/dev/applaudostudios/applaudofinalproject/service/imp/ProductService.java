@@ -5,12 +5,11 @@ import dev.applaudostudios.applaudofinalproject.dto.entities.ProductDto;
 import dev.applaudostudios.applaudofinalproject.entity.Product;
 import dev.applaudostudios.applaudofinalproject.service.IProductService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +17,9 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ObjectNull objectNull;
 
     @Override
     public List<Product> findAll(Integer limit, Integer from) {
@@ -74,7 +76,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> deleteProduct(Long id) {
+    public Object deleteProduct(Long id) {
         Optional<Product> productFound = productRepository.findById(id);
 
         if (productFound.isEmpty()) {
@@ -84,7 +86,7 @@ public class ProductService implements IProductService {
         productFound.get().setStatus(false);
         productRepository.save(productFound.get());
 
-        return Collections.emptyList();
+        return objectNull.getObjectNull();
     }
 
     private boolean findByName(String productName){

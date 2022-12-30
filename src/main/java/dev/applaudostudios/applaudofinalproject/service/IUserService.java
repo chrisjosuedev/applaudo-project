@@ -15,5 +15,5 @@ public interface IUserService {
 
     UserDto updateUser(String sid, UserUpdateDto user);
 
-    List<User> deleteUser(String sid);
+    Object deleteUser(String sid);
 }

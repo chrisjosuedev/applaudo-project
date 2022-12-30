@@ -14,5 +14,5 @@ public interface IProductService {
 
     Product updateProduct(Long id, ProductDto productDto);
 
-    List<Product> deleteProduct(Long id);
+    Object deleteProduct(Long id);
 }

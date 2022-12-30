@@ -7,12 +7,11 @@ import dev.applaudostudios.applaudofinalproject.repository.AddressRepository;
 import dev.applaudostudios.applaudofinalproject.service.IAddressService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.InfoCredential;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,9 @@ public class AddressService implements IAddressService {
 
     @Autowired
     private InfoCredential infoCredential;
+
+    @Autowired
+    private ObjectNull objectNull;
 
     @Override
     public List<Address> findAll(Integer from, Integer limit, String username) {
@@ -93,14 +95,14 @@ public class AddressService implements IAddressService {
     }
 
     @Override
-    public List<Address> deleteAddress(Long id, String username) {
+    public Object deleteAddress(Long id, String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
         Address addressFound = findUserAddress(id, currentLoggedUser);
 
         addressFound.setStatus(false);
         addressRepository.save(addressFound);
 
-        return Collections.emptyList();
+        return objectNull.getObjectNull();
     }
 
     private Address findUserAddress(Long id, User loggedUser) {

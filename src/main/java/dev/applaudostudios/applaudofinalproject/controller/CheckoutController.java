@@ -1,21 +1,23 @@
 package dev.applaudostudios.applaudofinalproject.controller;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.CheckoutDto;
-import dev.applaudostudios.applaudofinalproject.dto.responses.CheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
 import dev.applaudostudios.applaudofinalproject.service.ICheckoutService;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.JwtDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.security.Principal;
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/checkout")
+@Validated
 public class CheckoutController {
 
     @Autowired
@@ -41,14 +43,15 @@ public class CheckoutController {
 
     @PutMapping("/my-cart")
     public ResponseEntity<Object> updateCheckout(Principal principal,
-                                                 @RequestParam("productid") Long productId,
-                                                 @RequestParam("quantity") Integer quantity){
+                                                 @RequestParam("productid")
+                                                 Long productId,
+                                                 @RequestParam("quantity")
+                                                 @Min(value = 0, message = "Quantity must be greater than 0.")
+                                                 Integer quantity){
         String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
-        CheckoutResponseDto checkoutUpdated = checkoutService.updateCheckout(productId, quantity, username);
-
         return ResponseHandler.responseBuilder("Product in cart updated successfully.",
                 HttpStatus.OK,
-                (checkoutUpdated == null) ? Collections.emptyList() : checkoutUpdated);
+                checkoutService.updateCheckout(productId, quantity, username));
     }
 
 }

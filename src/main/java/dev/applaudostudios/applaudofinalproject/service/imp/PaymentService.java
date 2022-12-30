@@ -10,6 +10,7 @@ import dev.applaudostudios.applaudofinalproject.repository.PaymentTypeRepository
 import dev.applaudostudios.applaudofinalproject.service.IPaymentService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.InfoCredential;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,9 @@ public class PaymentService implements IPaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private ObjectNull objectNull;
 
     @Override
     public List<Payment> findAll(Integer from, Integer limit, String username) {
@@ -103,14 +107,14 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public List<Payment> deletePayment(Long id, String username) {
+    public Object deletePayment(Long id, String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
         Payment paymentFound = findUserPayment(id, currentLoggedUser);
 
         paymentFound.setStatus(false);
         paymentRepository.save(paymentFound);
 
-        return Collections.emptyList();
+        return objectNull.getObjectNull();
     }
 
     private Payment findUserPayment(Long id, User loggedUser) {

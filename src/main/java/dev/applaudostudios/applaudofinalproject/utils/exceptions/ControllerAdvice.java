@@ -7,8 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
-
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import javax.naming.AuthenticationException;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +28,6 @@ public class ControllerAdvice {
         return new ResponseEntity<>(err, ex.getHttpStatus());
     }
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<ErrorDto> runtimeExceptionHandler(RuntimeException ex) {
-        List<String> listOfRuntimeErrors = new ArrayList<>();
-        listOfRuntimeErrors.add(ex.getMessage());
-        ErrorDto err = ErrorDto.builder()
-                .errors(listOfRuntimeErrors)
-                .httpStatus(HttpStatus.FORBIDDEN)
-                .build();
-
-        return new ResponseEntity<>(err, err.getHttpStatus());
-    }
-
     @ExceptionHandler(value = AuthenticationException.class)
     public ResponseEntity<ErrorDto> authenticationExceptionExceptionHandler(Exception ex) {
         List<String> listOfAuthErrors = new ArrayList<>();
@@ -52,13 +41,37 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(value = HttpClientErrorException.Unauthorized.class)
-    public ResponseEntity<ErrorDto> HttpClientErrorUnauthorizedExceptionHandler(HttpClientErrorException.Unauthorized ex) {
+    public ResponseEntity<ErrorDto> httpClientErrorUnauthorizedExceptionHandler(HttpClientErrorException.Unauthorized ex) {
         List<String> listOfClientErrors = new ArrayList<>();
 
         listOfClientErrors.add("Invalid User Credentials");
         ErrorDto err = ErrorDto.builder()
                 .errors(listOfClientErrors)
                 .httpStatus(ex.getStatusCode())
+                .build();
+
+        return new ResponseEntity<>(err, err.getHttpStatus());
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public ResponseEntity<ErrorDto> constraintExceptionHandler(ConstraintViolationException ex) {
+        List<String> listOfClientErrors = new ArrayList<>();
+        listOfClientErrors.add(ex.getMessage().split(":")[1].trim());
+        ErrorDto err = ErrorDto.builder()
+                .errors(listOfClientErrors)
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+
+        return new ResponseEntity<>(err, err.getHttpStatus());
+    }
+
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorDto> defaultExceptionHandler(MethodArgumentTypeMismatchException ex) {
+        List<String> listOfClientErrors = new ArrayList<>();
+        listOfClientErrors.add(ex.getMessage());
+        ErrorDto err = ErrorDto.builder()
+                .errors(listOfClientErrors)
+                .httpStatus(HttpStatus.BAD_REQUEST)
                 .build();
 
         return new ResponseEntity<>(err, err.getHttpStatus());
@@ -77,5 +90,6 @@ public class ControllerAdvice {
 
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
+
 
 }
