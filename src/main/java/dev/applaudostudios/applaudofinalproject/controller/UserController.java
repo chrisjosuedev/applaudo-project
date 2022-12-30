@@ -55,13 +55,4 @@ public class UserController {
                 HttpStatus.OK,
                 userService.updateUser(username, userUpdateDto));
     }
-
-    @DeleteMapping
-    public ResponseEntity<Object> deleteUser(Principal principal) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
-        return ResponseHandler.responseBuilder("User removed successfully.",
-                HttpStatus.OK,
-                userService.deleteUser(username));
-    }
-
 }

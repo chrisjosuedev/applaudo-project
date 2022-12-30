@@ -1,5 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "payments")
@@ -37,6 +40,7 @@ public class Payment {
     private boolean isDefault;
 
     @Column
+    @JsonIgnore
     private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -47,6 +51,10 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
+    private List<Order> order = new ArrayList<>();
 
     public Payment(){}
 

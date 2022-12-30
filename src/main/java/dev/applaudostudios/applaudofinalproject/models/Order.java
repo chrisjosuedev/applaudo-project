@@ -1,12 +1,16 @@
 package dev.applaudostudios.applaudofinalproject.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -15,12 +19,13 @@ import java.util.Date;
 @Builder
 public class Order {
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(updatable = false, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @CreatedDate
     private Date date;
 
     @Column(name = "tracking_num")
@@ -32,8 +37,18 @@ public class Order {
     @ManyToOne(optional = false)
     private User user;
 
-    @OneToOne(mappedBy = "order")
-    private OrderDetail orderDetail;
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetail = new ArrayList<>();
 
     public Order() {}
 

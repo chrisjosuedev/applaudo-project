@@ -14,6 +14,4 @@ public interface IUserService {
     void createUser(String token);
 
     UserDto updateUser(String username, UserUpdateDto user);
-
-    Object deleteUser(String username);
 }

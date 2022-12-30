@@ -24,7 +24,7 @@ public class OrderDetail {
     @Column(name = "unit_price")
     private double price;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Order order;
 
     @OneToOne(optional = false)

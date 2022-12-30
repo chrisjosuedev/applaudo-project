@@ -83,16 +83,4 @@ public class UserService implements IUserService {
 
         return userHelper.userDtoResponse(currentUserLogged);
     }
-
-    @Override
-    public Object deleteUser(String username) {
-        User currentUserLogged = userHelper.findUserInSession(username);
-
-        currentUserLogged.setStatus(false);
-
-        userRepository.save(currentUserLogged);
-
-        return objectNull.getObjectNull();
-    }
-
 }

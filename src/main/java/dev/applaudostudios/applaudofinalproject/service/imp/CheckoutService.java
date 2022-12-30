@@ -112,6 +112,7 @@ public class CheckoutService implements ICheckoutService {
     @Override
     public Object deleteAllCheckout(String username) {
         User currentLoggedUser = userHelper.findUserInSession(username);
+
         List<CartItemSession> myCart = checkoutRepository.findAllByUserSid(currentLoggedUser.getSid());
 
          myCart.forEach((cartItem) -> {

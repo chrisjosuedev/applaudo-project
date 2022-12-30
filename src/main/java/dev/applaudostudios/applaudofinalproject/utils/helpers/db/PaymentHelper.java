@@ -25,7 +25,7 @@ public class PaymentHelper {
         Optional<Payment> paymentFound = paymentRepository.findByIdAndStatusIsTrueAndUserSid(id, loggedUser.getSid());
 
         if (paymentFound.isEmpty()) {
-            throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
+            throw new MyBusinessException("Current user doesn't have an payment with given id.", HttpStatus.FORBIDDEN);
         }
 
         return paymentFound.get();
