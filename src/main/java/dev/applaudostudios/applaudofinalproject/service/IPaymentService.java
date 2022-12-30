@@ -1,6 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.service;
 import dev.applaudostudios.applaudofinalproject.dto.entities.PaymentDto;
-import dev.applaudostudios.applaudofinalproject.entity.Payment;
+import dev.applaudostudios.applaudofinalproject.models.Payment;
 
 import java.util.List;
 

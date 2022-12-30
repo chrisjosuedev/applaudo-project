@@ -1,7 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.service;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.ProductDto;
-import dev.applaudostudios.applaudofinalproject.entity.Product;
+import dev.applaudostudios.applaudofinalproject.models.Product;
 
 import java.util.List;
 

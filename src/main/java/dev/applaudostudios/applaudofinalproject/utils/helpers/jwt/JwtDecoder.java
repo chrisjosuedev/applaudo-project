@@ -1,4 +1,4 @@
-package dev.applaudostudios.applaudofinalproject.utils.helpers;
+package dev.applaudostudios.applaudofinalproject.utils.helpers.jwt;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;

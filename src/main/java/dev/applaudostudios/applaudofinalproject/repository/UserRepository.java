@@ -1,6 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.repository;
 
-import dev.applaudostudios.applaudofinalproject.entity.User;
+import dev.applaudostudios.applaudofinalproject.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

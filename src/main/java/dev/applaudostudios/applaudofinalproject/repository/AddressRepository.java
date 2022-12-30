@@ -1,6 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.repository;
 
-import dev.applaudostudios.applaudofinalproject.entity.Address;
+import dev.applaudostudios.applaudofinalproject.models.Address;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -2,21 +2,20 @@ package dev.applaudostudios.applaudofinalproject.service.imp;
 
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.PaymentDto;
-import dev.applaudostudios.applaudofinalproject.entity.Payment;
-import dev.applaudostudios.applaudofinalproject.entity.PaymentType;
-import dev.applaudostudios.applaudofinalproject.entity.User;
+import dev.applaudostudios.applaudofinalproject.models.Payment;
+import dev.applaudostudios.applaudofinalproject.models.PaymentType;
+import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.PaymentRepository;
 import dev.applaudostudios.applaudofinalproject.repository.PaymentTypeRepository;
 import dev.applaudostudios.applaudofinalproject.service.IPaymentService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.InfoCredential;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.db.InfoCredential;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

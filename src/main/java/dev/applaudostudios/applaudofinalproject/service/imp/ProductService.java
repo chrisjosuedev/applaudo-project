@@ -2,10 +2,10 @@ package dev.applaudostudios.applaudofinalproject.service.imp;
 
 import dev.applaudostudios.applaudofinalproject.repository.ProductRepository;
 import dev.applaudostudios.applaudofinalproject.dto.entities.ProductDto;
-import dev.applaudostudios.applaudofinalproject.entity.Product;
+import dev.applaudostudios.applaudofinalproject.models.Product;
 import dev.applaudostudios.applaudofinalproject.service.IProductService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package dev.applaudostudios.applaudofinalproject.entity;
+package dev.applaudostudios.applaudofinalproject.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

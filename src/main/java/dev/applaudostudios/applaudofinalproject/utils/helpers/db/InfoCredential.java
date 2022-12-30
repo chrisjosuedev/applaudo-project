@@ -1,6 +1,6 @@
-package dev.applaudostudios.applaudofinalproject.utils.helpers;
+package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
 
-import dev.applaudostudios.applaudofinalproject.entity.User;
+import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.UserRepository;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import org.springframework.beans.factory.annotation.Autowired;

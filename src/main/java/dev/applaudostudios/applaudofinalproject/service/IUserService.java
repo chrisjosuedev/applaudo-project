@@ -2,7 +2,7 @@ package dev.applaudostudios.applaudofinalproject.service;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserUpdateDto;
-import dev.applaudostudios.applaudofinalproject.entity.User;
+import dev.applaudostudios.applaudofinalproject.models.User;
 
 import java.util.List;
 

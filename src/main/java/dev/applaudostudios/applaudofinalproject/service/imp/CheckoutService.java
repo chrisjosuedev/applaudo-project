@@ -4,15 +4,16 @@ import dev.applaudostudios.applaudofinalproject.dto.entities.CheckoutDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.CartResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.CheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ICheckoutResponseDto;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.ObjectNull;
-import dev.applaudostudios.applaudofinalproject.entity.CartItemSession;
-import dev.applaudostudios.applaudofinalproject.entity.Product;
-import dev.applaudostudios.applaudofinalproject.entity.User;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.MyMath;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.ObjectNull;
+import dev.applaudostudios.applaudofinalproject.models.CartItemSession;
+import dev.applaudostudios.applaudofinalproject.models.Product;
+import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.CheckoutRepository;
 import dev.applaudostudios.applaudofinalproject.repository.ProductRepository;
 import dev.applaudostudios.applaudofinalproject.service.ICheckoutService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.InfoCredential;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.db.InfoCredential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -66,14 +67,56 @@ public class CheckoutService implements ICheckoutService {
     @Override
     public Object updateCheckout(Long productId, Integer quantity, String username) {
         User currentLoggedUser = infoCredential.findUserInSession(username);
-        Optional<CartItemSession> cartProductFound = checkoutRepository
-                .findByProductIdAndUserSid(productId, currentLoggedUser.getSid());
+        CartItemSession cartProductFound = findUserCart(productId, currentLoggedUser.getSid());
 
-        if (cartProductFound.isEmpty()) {
-            throw new MyBusinessException("User doesn't have a product in the cart with given id", HttpStatus.BAD_REQUEST);
+        // Verify if product is available
+        Product product = findProduct(productId, quantity);
+
+        // Update stock
+        int updateQuantityAtStock = cartProductFound.getQuantity() - quantity;
+        product.setStock(product.getStock() + updateQuantityAtStock);
+        productRepository.save(product);
+
+        // Update Checkout
+        if (quantity == 0) {
+            checkoutRepository.delete(cartProductFound);
+            return objectNull.getObjectNull();
         }
 
-        Product product = findProduct(productId, quantity);
+        cartProductFound.setQuantity(quantity);
+        checkoutRepository.save(cartProductFound);
+
+        return cartResponse(cartProductFound);
+    }
+
+    @Override
+    public Object deleteCheckout(Long productId, String username) {
+        User currentLoggedUser = infoCredential.findUserInSession(username);
+        CartItemSession cartProductFound = findUserCart(productId, currentLoggedUser.getSid());
+
+        // Update Stock
+        Product product = findProduct(productId);
+        product.setStock(product.getStock() + cartProductFound.getQuantity());
+        productRepository.save(product);
+
+        // Delete Checkout
+        checkoutRepository.delete(cartProductFound);
+
+        return objectNull.getObjectNull();
+    }
+
+    @Override
+    public Object deleteAllCheckout(String username) {
+        User currentLoggedUser = infoCredential.findUserInSession(username);
+        List<CartItemSession> myCart = checkoutRepository.findAllByUserSid(currentLoggedUser.getSid());
+
+        myCart.forEach((cartItem) -> {
+            Product product = findProduct(cartItem.getProduct().getId());
+            product.setStock(product.getStock() + cartItem.getQuantity());
+            productRepository.save(product);
+        });
+
+        checkoutRepository.deleteAllByUserSid(currentLoggedUser.getSid());
 
         return objectNull.getObjectNull();
     }
@@ -86,23 +129,46 @@ public class CheckoutService implements ICheckoutService {
         return myCartInformation(myCart, totalCart);
     }
 
-    private Product findProduct(Long id, int quantity) {
+    // Logic Methods
+
+    private CartItemSession findUserCart(Long productId, String sid) {
+        Optional<CartItemSession> cartProductFound = checkoutRepository
+                .findByProductIdAndUserSid(productId, sid);
+
+        if (cartProductFound.isEmpty()) {
+            throw new MyBusinessException("User doesn't have a product in the cart with given id", HttpStatus.BAD_REQUEST);
+        }
+
+        return  cartProductFound.get();
+    }
+
+    private Product findProduct(Long id, double quantity) {
+        Product productFound = findProduct(id);
+
+        if (quantity > productFound.getStock()) {
+            throw new MyBusinessException("Quantity entered exceeds the available in stock.", HttpStatus.BAD_REQUEST);
+        }
+
+        return productFound;
+    }
+
+    private Product findProduct(Long id) {
         Optional<Product> productFound = productRepository.findByIdAndStatusIsTrue(id);
 
         if (productFound.isEmpty()) {
             throw new MyBusinessException("Product with given id doesn't exists.", HttpStatus.NOT_FOUND);
         }
-        if (quantity > productFound.get().getStock()) {
-            throw new MyBusinessException("Quantity entered exceeds the available in stock.", HttpStatus.BAD_REQUEST);
-        }
+
         return productFound.get();
     }
+
+    // Build DTO's
 
     private CartResponseDto myCartInformation(List<ICheckoutResponseDto> myCart, Double total) {
         return CartResponseDto.builder()
                 .numberOfItems(myCart.size())
                 .myCart(myCart)
-                .total((total == null) ? 0.00 : total)
+                .total((total == null) ? 0.00 : MyMath.round(total, 2))
                 .build();
     }
 

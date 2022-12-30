@@ -1,7 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.service;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.AddressDto;
-import dev.applaudostudios.applaudofinalproject.entity.Address;
+import dev.applaudostudios.applaudofinalproject.models.Address;
 
 import java.util.List;
 

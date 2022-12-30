@@ -1,5 +1,5 @@
 package dev.applaudostudios.applaudofinalproject.repository;
-import dev.applaudostudios.applaudofinalproject.entity.Payment;
+import dev.applaudostudios.applaudofinalproject.models.Payment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

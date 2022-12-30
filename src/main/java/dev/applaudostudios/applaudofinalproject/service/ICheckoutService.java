@@ -8,4 +8,6 @@ public interface ICheckoutService {
     CartResponseDto findMyCart(String username);
     CheckoutResponseDto addItemToCart(CheckoutDto checkoutDto, String username);
     Object updateCheckout(Long productId, Integer quantity, String username);
+    Object deleteCheckout(Long productId, String username);
+    Object deleteAllCheckout(String username);
 }

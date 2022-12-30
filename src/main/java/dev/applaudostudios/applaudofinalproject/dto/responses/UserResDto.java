@@ -1,7 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.dto.responses;
 
-import dev.applaudostudios.applaudofinalproject.entity.Address;
-import dev.applaudostudios.applaudofinalproject.entity.Payment;
+import dev.applaudostudios.applaudofinalproject.models.Address;
+import dev.applaudostudios.applaudofinalproject.models.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

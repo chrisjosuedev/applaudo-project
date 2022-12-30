@@ -3,7 +3,7 @@ package dev.applaudostudios.applaudofinalproject.controller;
 import dev.applaudostudios.applaudofinalproject.dto.entities.ProductDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.PagResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
-import dev.applaudostudios.applaudofinalproject.entity.Product;
+import dev.applaudostudios.applaudofinalproject.models.Product;
 import dev.applaudostudios.applaudofinalproject.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
