@@ -13,7 +13,7 @@ public interface IUserService {
 
     void createUser(String token);
 
-    UserDto updateUser(String sid, UserUpdateDto user);
+    UserDto updateUser(String username, UserUpdateDto user);
 
-    Object deleteUser(String sid);
+    Object deleteUser(String username);
 }

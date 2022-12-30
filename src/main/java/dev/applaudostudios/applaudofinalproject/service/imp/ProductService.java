@@ -5,6 +5,7 @@ import dev.applaudostudios.applaudofinalproject.dto.entities.ProductDto;
 import dev.applaudostudios.applaudofinalproject.models.Product;
 import dev.applaudostudios.applaudofinalproject.service.IProductService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.db.ProductHelper;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +18,8 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private ProductHelper productHelper;
     @Autowired
     private ObjectNull objectNull;
 
@@ -48,10 +50,10 @@ public class ProductService implements IProductService {
 
     @Override
     public Product createProduct(ProductDto productDto) {
-        if(findByName(productDto.getProductName())) {
+        if(productHelper.findByName(productDto.getProductName())) {
             throw new MyBusinessException("Already exists a Product with given name", HttpStatus.BAD_REQUEST);
         }
-        Product newProduct = productFromDto(productDto);
+        Product newProduct = productHelper.productFromDto(productDto);
         productRepository.save(newProduct);
         return newProduct;
     }
@@ -87,20 +89,5 @@ public class ProductService implements IProductService {
         productRepository.save(productFound.get());
 
         return objectNull.getObjectNull();
-    }
-
-    private boolean findByName(String productName){
-        Optional<Product> productFound = productRepository.findByProductNameContainingIgnoreCase(productName);
-        return productFound.isPresent();
-    }
-
-    private Product productFromDto(ProductDto productDto) {
-        return Product.builder()
-                .productName(productDto.getProductName())
-                .description(productDto.getDescription())
-                .stock(productDto.getStock())
-                .unitPrice(productDto.getUnitPrice())
-                .status(productDto.isStatus())
-                .build();
     }
 }

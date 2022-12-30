@@ -5,6 +5,7 @@ import dev.applaudostudios.applaudofinalproject.dto.responses.PagResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
 import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.service.IUserService;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.jwt.JwtDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -45,19 +47,21 @@ public class UserController {
                 HttpStatus.OK, userService.findByUsername(username));
     }
 
-    @PutMapping("/{sid}")
-    public ResponseEntity<Object> updateUser(@PathVariable("sid") String sid,
+    @PutMapping
+    public ResponseEntity<Object> updateUser(Principal principal,
                                              @Valid @RequestBody UserUpdateDto userUpdateDto) {
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
         return ResponseHandler.responseBuilder("User updated successfully.",
                 HttpStatus.OK,
-                userService.updateUser(sid, userUpdateDto));
+                userService.updateUser(username, userUpdateDto));
     }
 
-    @DeleteMapping("/{sid}")
-    public ResponseEntity<Object> deleteUser(@PathVariable("sid") String sid) {
+    @DeleteMapping
+    public ResponseEntity<Object> deleteUser(Principal principal) {
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
         return ResponseHandler.responseBuilder("User removed successfully.",
                 HttpStatus.OK,
-                userService.deleteUser(sid));
+                userService.deleteUser(username));
     }
 
 }

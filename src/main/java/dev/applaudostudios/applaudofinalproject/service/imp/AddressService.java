@@ -6,7 +6,8 @@ import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.AddressRepository;
 import dev.applaudostudios.applaudofinalproject.service.IAddressService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.db.InfoCredential;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.db.AddressHelper;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.db.UserHelper;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -17,19 +18,18 @@ import java.util.Optional;
 
 @Service
 public class AddressService implements IAddressService {
-
     @Autowired
     private AddressRepository addressRepository;
-
     @Autowired
-    private InfoCredential infoCredential;
-
+    private UserHelper userHelper;
+    @Autowired
+    private AddressHelper addressHelper;
     @Autowired
     private ObjectNull objectNull;
 
     @Override
     public List<Address> findAll(Integer from, Integer limit, String username) {
-        User currentLoggedUser = infoCredential.findUserInSession(username);
+        User currentLoggedUser = userHelper.findUserInSession(username);
 
         List<Address> allAddress = addressRepository.findAllByUserSidAndStatusIsTrue(currentLoggedUser.getSid());
 
@@ -50,14 +50,14 @@ public class AddressService implements IAddressService {
 
     @Override
     public Address findAddressById(Long id, String username) {
-        User currentLoggedUser = infoCredential.findUserInSession(username);
-        return findUserAddress(id, currentLoggedUser);
+        User currentLoggedUser = userHelper.findUserInSession(username);
+        return addressHelper.findUserAddress(id, currentLoggedUser);
     }
 
     @Override
     public Address updateAddress(Long id, AddressDto addressDto, String username) {
-        User currentLoggedUser = infoCredential.findUserInSession(username);
-        Address addressFound = findUserAddress(id, currentLoggedUser);
+        User currentLoggedUser = userHelper.findUserInSession(username);
+        Address addressFound = addressHelper.findUserAddress(id, currentLoggedUser);
 
         Optional<Address> currentDefaultAddress = addressRepository.findAddress(currentLoggedUser.getSid());
 
@@ -78,10 +78,10 @@ public class AddressService implements IAddressService {
 
     @Override
     public Address createAddress(AddressDto addressDto, String username) {
-        User currentLoggedUser = infoCredential.findUserInSession(username);
+        User currentLoggedUser = userHelper.findUserInSession(username);
 
         addressDto.setUser(currentLoggedUser);
-        Address newAddress = addressFromDto(addressDto);
+        Address newAddress = addressHelper.addressFromDto(addressDto);
 
         Optional<Address> currentDefaultAddress = addressRepository.findAddress(currentLoggedUser.getSid());
 
@@ -96,35 +96,12 @@ public class AddressService implements IAddressService {
 
     @Override
     public Object deleteAddress(Long id, String username) {
-        User currentLoggedUser = infoCredential.findUserInSession(username);
-        Address addressFound = findUserAddress(id, currentLoggedUser);
+        User currentLoggedUser = userHelper.findUserInSession(username);
+        Address addressFound = addressHelper.findUserAddress(id, currentLoggedUser);
 
         addressFound.setStatus(false);
         addressRepository.save(addressFound);
 
         return objectNull.getObjectNull();
-    }
-
-    private Address findUserAddress(Long id, User loggedUser) {
-        Optional<Address> addressFound = addressRepository.findByIdAndStatusIsTrueAndUserSid(id, loggedUser.getSid());
-
-        if (addressFound.isEmpty()) {
-            throw new MyBusinessException("Current user doesn't have an address with given id.", HttpStatus.FORBIDDEN);
-        }
-
-        return addressFound.get();
-    }
-
-    private Address addressFromDto(AddressDto addressDto) {
-        return Address.builder()
-                .country(addressDto.getCountry())
-                .state(addressDto.getState())
-                .street(addressDto.getStreet())
-                .city(addressDto.getCity())
-                .zipCode(addressDto.getZipCode())
-                .user(addressDto.getUser())
-                .status(true)
-                .isDefault(addressDto.isDefault())
-                .build();
     }
 }
