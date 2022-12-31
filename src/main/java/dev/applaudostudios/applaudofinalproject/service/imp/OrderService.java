@@ -2,11 +2,9 @@ package dev.applaudostudios.applaudofinalproject.service.imp;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.OrderDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
-import dev.applaudostudios.applaudofinalproject.models.Address;
-import dev.applaudostudios.applaudofinalproject.models.Order;
-import dev.applaudostudios.applaudofinalproject.models.Payment;
-import dev.applaudostudios.applaudofinalproject.models.User;
+import dev.applaudostudios.applaudofinalproject.models.*;
 import dev.applaudostudios.applaudofinalproject.repository.OrderRepository;
+import dev.applaudostudios.applaudofinalproject.service.IOrderDetailsService;
 import dev.applaudostudios.applaudofinalproject.service.IOrderService;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.db.AddressHelper;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.db.OrderHelper;
@@ -35,22 +33,33 @@ public class OrderService implements IOrderService {
     @Autowired
     private OrderHelper orderHelper;
 
+    @Autowired
+    private IOrderDetailsService orderDetailsService;
+
     @Override
     public OrderResponseDto createOrder(OrderDto orderDto, String username) {
         User currentLoggedUser = userHelper.findUserInSession(username);
+
         Payment paymentFound = paymentHelper.findUserPayment(orderDto.getPayment().getId(), currentLoggedUser);
         Address addressFound = addressHelper.findUserAddress(orderDto.getAddress().getId(), currentLoggedUser);
-
         orderDto.setPayment(paymentFound);
         orderDto.setAddress(addressFound);
         orderDto.setUser(currentLoggedUser);
 
-        // Procesar Cart
-
+        // Generate new Order
         Order newOrder = orderHelper.orderFromDto(orderDto);
-
         orderRepository.save(newOrder);
 
+        // Order Details - Delegate responsibility to Order Details Service
+        orderDetailsService.createOrders(newOrder, currentLoggedUser.getSid());
+
         return orderHelper.orderResponseDto(newOrder);
+    }
+
+    @Override
+    public OrderResponseDto findOrderById(Long id, String username) {
+        User currentLoggedUser = userHelper.findUserInSession(username);
+        Order orderFound = orderHelper.findById(id, currentLoggedUser.getSid());
+        return orderHelper.orderResponseDto(orderFound);
     }
 }

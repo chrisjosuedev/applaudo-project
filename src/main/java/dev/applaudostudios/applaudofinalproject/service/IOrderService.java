@@ -5,4 +5,6 @@ import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
 
 public interface IOrderService {
     OrderResponseDto createOrder(OrderDto orderDto, String username);
+
+    OrderResponseDto findOrderById(Long id, String username);
 }

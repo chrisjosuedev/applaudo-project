@@ -14,7 +14,7 @@ import javax.validation.constraints.Min;
 @Builder
 public class OrderDetail {
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -27,7 +27,8 @@ public class OrderDetail {
     @ManyToOne(optional = false)
     private Order order;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     public OrderDetail(){}

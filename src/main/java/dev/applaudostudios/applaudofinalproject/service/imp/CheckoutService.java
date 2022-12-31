@@ -5,7 +5,6 @@ import dev.applaudostudios.applaudofinalproject.dto.responses.CartResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.CheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ICheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.db.CheckoutHelper;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.MyMath;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.ObjectNull;
 import dev.applaudostudios.applaudofinalproject.models.CartItemSession;
 import dev.applaudostudios.applaudofinalproject.models.Product;

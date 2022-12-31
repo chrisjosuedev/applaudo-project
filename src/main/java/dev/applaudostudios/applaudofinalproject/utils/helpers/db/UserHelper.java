@@ -1,6 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
+import dev.applaudostudios.applaudofinalproject.dto.responses.UserResDto;
 import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.UserRepository;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
@@ -43,6 +44,14 @@ public class UserHelper {
                 .username(userLogged.getUsername())
                 .telephone(userLogged.getTelephone())
                 .status(true)
+                .build();
+    }
+
+    public UserResDto userToOrderInfoDto(User user) {
+        return UserResDto.builder()
+                .sid(user.getSid())
+                .fullName(user.getFirstName().concat(" ").concat(user.getLastName()))
+                .username(user.getUsername())
                 .build();
     }
 
