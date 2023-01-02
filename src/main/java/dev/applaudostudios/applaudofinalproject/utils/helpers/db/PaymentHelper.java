@@ -31,6 +31,16 @@ public class PaymentHelper {
         return paymentFound.get();
     }
 
+    public Payment findPayment(User loggedUser) {
+        Optional<Payment> paymentFound = paymentRepository.findPayment(loggedUser.getSid());
+
+        if (paymentFound.isEmpty()) {
+            throw new MyBusinessException("Current user doesn't have a default payment method.", HttpStatus.FORBIDDEN);
+        }
+
+        return paymentFound.get();
+    }
+
     public PaymentType findPaymentType(Long id) {
         Optional<PaymentType> typeFound = paymentTypeRepository.findById(id);
 

@@ -3,9 +3,7 @@ package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
 import dev.applaudostudios.applaudofinalproject.dto.entities.OrderDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ICheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
-import dev.applaudostudios.applaudofinalproject.models.CartItemSession;
-import dev.applaudostudios.applaudofinalproject.models.Order;
-import dev.applaudostudios.applaudofinalproject.models.OrderDetail;
+import dev.applaudostudios.applaudofinalproject.models.*;
 import dev.applaudostudios.applaudofinalproject.repository.OrderDetailRepository;
 import dev.applaudostudios.applaudofinalproject.repository.OrderRepository;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
@@ -29,13 +27,13 @@ public class OrderHelper {
     @Autowired
     private UserHelper userHelper;
 
-    public Order orderFromDto(OrderDto orderDto) {
+    public Order orderFromDto(Payment payment, Address address, User loggedUser) {
         return Order.builder()
                 .trackNum(UUID.randomUUID().toString())
-                .status(true)
-                .user(orderDto.getUser())
-                .address(orderDto.getAddress())
-                .payment(orderDto.getPayment())
+                .status(false)
+                .user(loggedUser)
+                .address(address)
+                .payment(payment)
                 .build();
     }
 
@@ -53,7 +51,7 @@ public class OrderHelper {
                 .shippingAddress(order.getAddress())
                 .trackingNum(order.getTrackNum())
                 .total(MyMath.round(totalOrder, 2))
-                .status(true)
+                .status(!order.isStatus() ? "Paid and shipped.":"Delivered.")
                 .build();
     }
 

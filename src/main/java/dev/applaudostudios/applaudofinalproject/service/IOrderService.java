@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface IOrderService {
     OrderResponseDto createOrder(OrderDto orderDto, String username);
+    OrderResponseDto createOneClickOrder(String username);
+    OrderResponseDto updateOrder(Boolean status, String trackNum, String username);
     OrderResponseDto findOrderById(Long id, String username);
     List<Order> findAllOrders(String username);
 }

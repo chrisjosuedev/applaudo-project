@@ -9,7 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class Order {
 
     @JsonBackReference
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "order")
-    private List<OrderDetail> orderDetail = new ArrayList<>();
+    private List<OrderDetail> orderDetail;
 
     public Order() {}
 

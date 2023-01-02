@@ -44,4 +44,22 @@ public class OrderController {
                 HttpStatus.CREATED,
                 orderService.createOrder(orderDto, username));
     }
+
+    @PostMapping("/place-order/one-click")
+    public ResponseEntity<Object> placeAnOrderByOneClick(Principal principal) {
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        return ResponseHandler.responseBuilder("Order placed.",
+                HttpStatus.CREATED,
+                orderService.createOneClickOrder(username));
+    }
+
+    @PutMapping("/tracking/{tracking_num}/status/{status}")
+    public ResponseEntity<Object> updateDeliveryStatus(Principal principal,
+                                                       @PathVariable("tracking_num") String trackNum,
+                                                       @PathVariable("status") Boolean status) {
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        return ResponseHandler.responseBuilder("Updated order delivery status.",
+                HttpStatus.OK,
+                orderService.updateOrder(status, trackNum, username));
+    }
 }

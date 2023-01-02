@@ -26,6 +26,16 @@ public class AddressHelper {
         return addressFound.get();
     }
 
+    public Address findAddress(User loggedUser) {
+        Optional<Address> addressFound = addressRepository.findAddress(loggedUser.getSid());
+
+        if (addressFound.isEmpty()) {
+            throw new MyBusinessException("Current user doesn't have a default address.", HttpStatus.FORBIDDEN);
+        }
+
+        return addressFound.get();
+    }
+
     public Address addressFromDto(AddressDto addressDto) {
         return Address.builder()
                 .country(addressDto.getCountry())

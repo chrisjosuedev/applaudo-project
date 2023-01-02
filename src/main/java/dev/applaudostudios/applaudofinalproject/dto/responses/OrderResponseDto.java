@@ -22,6 +22,6 @@ public class OrderResponseDto {
     private Payment payment;
     private Address shippingAddress;
     private List<ICheckoutResponseDto> checkoutDetails;
-    private boolean status;
+    private String status;
     private Double total;
 }

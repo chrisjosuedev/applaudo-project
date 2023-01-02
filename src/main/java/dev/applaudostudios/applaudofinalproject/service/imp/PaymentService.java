@@ -85,6 +85,7 @@ public class PaymentService implements IPaymentService {
 
 
         Optional<Payment> currentDefaultPayment = paymentRepository.findPayment(currentLoggedUser.getSid());
+
         if(paymentDto.isDefault() && currentDefaultPayment.isPresent()) {
             currentDefaultPayment.get().setDefault(false);
             paymentRepository.save(currentDefaultPayment.get());
