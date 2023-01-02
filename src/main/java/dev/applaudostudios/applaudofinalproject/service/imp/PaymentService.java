@@ -45,10 +45,6 @@ public class PaymentService implements IPaymentService {
             return allPayments;
         }
 
-        if (limit < 0 || from < 0) {
-            throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
-        }
-
         allPayments = paymentRepository.findAllByUserSidAndStatusIsTrue(
                 currentLoggedUser.getSid(),
                 PageRequest.of(from, limit));

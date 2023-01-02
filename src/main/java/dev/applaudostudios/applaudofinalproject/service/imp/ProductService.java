@@ -31,10 +31,6 @@ public class ProductService implements IProductService {
             return allProducts;
         }
 
-        if (limit < 0 || from < 0) {
-            throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
-        }
-
         allProducts = productRepository.findAllByStatusIsTrue(PageRequest.of(from, limit));
         return allProducts;
     }

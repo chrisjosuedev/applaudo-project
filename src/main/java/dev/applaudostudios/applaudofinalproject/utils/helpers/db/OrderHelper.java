@@ -1,6 +1,5 @@
 package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
 
-import dev.applaudostudios.applaudofinalproject.dto.entities.OrderDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ICheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
 import dev.applaudostudios.applaudofinalproject.models.*;

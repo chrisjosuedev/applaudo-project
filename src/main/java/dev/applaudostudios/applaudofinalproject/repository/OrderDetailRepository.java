@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
-    @Query("SELECT c.product.id as productId, p.productName as productName, p.unitPrice as unitPrice, (p.unitPrice * c.quantity) as subTotal, c.quantity as quantity FROM OrderDetail c JOIN c.product p WHERE c.order.id = ?1")
+    @Query("SELECT c.product.id as productId, p.productName as productName, " +
+            "p.unitPrice as unitPrice, (p.unitPrice * c.quantity) as subTotal, c.quantity as quantity " +
+            "FROM OrderDetail c JOIN c.product p WHERE c.order.id = ?1")
     List<ICheckoutResponseDto> getOrderDetailInformation(Long id);
 
-    @Query("SELECT SUM(p.unitPrice * c.quantity) FROM OrderDetail c JOIN c.product p WHERE c.order.id = ?1")
+    @Query("SELECT SUM(c.price * c.quantity) FROM OrderDetail c WHERE c.order.id = ?1")
     Double getTotal(Long id);
 }

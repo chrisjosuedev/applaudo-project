@@ -9,13 +9,17 @@ import dev.applaudostudios.applaudofinalproject.utils.helpers.jwt.JwtDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.security.Principal;
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping("/payments")
 public class PaymentController {
 
@@ -26,9 +30,9 @@ public class PaymentController {
     public ResponseEntity<Object> findAllPayments(
             Principal principal,
             @RequestParam(required = false, name = "from")
-            Integer from,
+            @Min(value = 0, message = "From must be positive number.") Integer from,
             @RequestParam(required = false, name = "limit")
-            Integer limit
+            @Positive(message = "From must be greater than 0.") Integer limit
     ) {
         String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
 

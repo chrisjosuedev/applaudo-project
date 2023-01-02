@@ -1,6 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.service;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.OrderDto;
+import dev.applaudostudios.applaudofinalproject.dto.responses.IGeneralOrderResponse;
 import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
 import dev.applaudostudios.applaudofinalproject.models.Order;
 
@@ -11,5 +12,5 @@ public interface IOrderService {
     OrderResponseDto createOneClickOrder(String username);
     OrderResponseDto updateOrder(Boolean status, String trackNum, String username);
     OrderResponseDto findOrderById(Long id, String username);
-    List<Order> findAllOrders(String username);
+    List<IGeneralOrderResponse> findAllOrders(String username);
 }

@@ -8,13 +8,17 @@ import dev.applaudostudios.applaudofinalproject.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
+@Validated
 @RolesAllowed("ADMIN")
 @RequestMapping("/products")
 public class ProductController {
@@ -24,9 +28,9 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Object> findAllProducts(
             @RequestParam(required = false, name = "limit")
-            Integer limit,
+            @Min(value = 0, message = "From must be positive number.") Integer limit,
             @RequestParam(required = false, name = "from")
-            Integer from
+            @Positive(message = "From must be greater than 0.") Integer from
     ) {
 
         List<Product> allProducts = productService.findAll(limit, from);

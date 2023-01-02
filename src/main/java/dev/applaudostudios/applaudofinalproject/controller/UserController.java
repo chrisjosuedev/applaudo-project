@@ -9,14 +9,18 @@ import dev.applaudostudios.applaudofinalproject.utils.helpers.jwt.JwtDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.security.Principal;
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping("/users")
 public class UserController {
 
@@ -27,9 +31,9 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Object> findAllUsers(
             @RequestParam(required = false, name = "limit")
-            Integer limit,
+            @Min(value = 0, message = "From must be positive number.") Integer limit,
             @RequestParam(required = false, name = "from")
-            Integer from
+            @Positive(message = "From must be greater than 0.") Integer from
     ) {
         List<User> usersList = userService.findAll(limit, from);
         return ResponseHandler.responseBuilder("Users registered.",

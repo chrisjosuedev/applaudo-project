@@ -5,13 +5,11 @@ import dev.applaudostudios.applaudofinalproject.models.Address;
 import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.AddressRepository;
 import dev.applaudostudios.applaudofinalproject.service.IAddressService;
-import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.db.AddressHelper;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.db.UserHelper;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.ObjectNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +33,6 @@ public class AddressService implements IAddressService {
 
         if (limit == null || from == null) {
             return allAddress;
-        }
-
-        if (limit < 0 || from < 0) {
-            throw new MyBusinessException("Limit and From must be greater than zero.", HttpStatus.BAD_REQUEST);
         }
 
         allAddress = addressRepository.findAllByUserSidAndStatusIsTrue(

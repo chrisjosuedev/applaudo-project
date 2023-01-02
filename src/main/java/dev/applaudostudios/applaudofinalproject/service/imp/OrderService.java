@@ -1,6 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.service.imp;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.OrderDto;
+import dev.applaudostudios.applaudofinalproject.dto.responses.IGeneralOrderResponse;
 import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
 import dev.applaudostudios.applaudofinalproject.models.*;
 import dev.applaudostudios.applaudofinalproject.repository.OrderRepository;
@@ -101,8 +102,8 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> findAllOrders(String username) {
+    public List<IGeneralOrderResponse> findAllOrders(String username) {
         User currentLoggedUser = userHelper.findUserInSession(username);
-        return orderRepository.findAllByUserSid(currentLoggedUser.getSid());
+        return orderRepository.findAllOrdersByUserSid(currentLoggedUser.getSid());
     }
 }
