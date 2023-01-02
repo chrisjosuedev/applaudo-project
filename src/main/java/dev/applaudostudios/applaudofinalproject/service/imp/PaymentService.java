@@ -30,9 +30,6 @@ public class PaymentService implements IPaymentService {
     private PaymentHelper paymentHelper;
 
     @Autowired
-    private PaymentTypeRepository paymentTypeRepository;
-
-    @Autowired
     private PaymentRepository paymentRepository;
 
     @Autowired

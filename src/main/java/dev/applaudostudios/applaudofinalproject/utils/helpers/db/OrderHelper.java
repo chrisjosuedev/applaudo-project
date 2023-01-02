@@ -3,7 +3,9 @@ package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
 import dev.applaudostudios.applaudofinalproject.dto.entities.OrderDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ICheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
+import dev.applaudostudios.applaudofinalproject.models.CartItemSession;
 import dev.applaudostudios.applaudofinalproject.models.Order;
+import dev.applaudostudios.applaudofinalproject.models.OrderDetail;
 import dev.applaudostudios.applaudofinalproject.repository.OrderDetailRepository;
 import dev.applaudostudios.applaudofinalproject.repository.OrderRepository;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
@@ -61,7 +63,6 @@ public class OrderHelper {
             throw new MyBusinessException("User doesn't have and Order with given id.",
                     HttpStatus.BAD_REQUEST);
         }
-
         return orderFound.get();
     }
 }

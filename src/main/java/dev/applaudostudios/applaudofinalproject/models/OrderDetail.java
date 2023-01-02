@@ -1,5 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class OrderDetail {
     @Column(name = "unit_price")
     private double price;
 
+    @JsonManagedReference
     @ManyToOne(optional = false)
     private Order order;
 

@@ -6,14 +6,12 @@ import dev.applaudostudios.applaudofinalproject.models.*;
 import dev.applaudostudios.applaudofinalproject.repository.OrderRepository;
 import dev.applaudostudios.applaudofinalproject.service.IOrderDetailsService;
 import dev.applaudostudios.applaudofinalproject.service.IOrderService;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.db.AddressHelper;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.db.OrderHelper;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.db.PaymentHelper;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.db.UserHelper;
+import dev.applaudostudios.applaudofinalproject.utils.helpers.db.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -34,11 +32,15 @@ public class OrderService implements IOrderService {
     private OrderHelper orderHelper;
 
     @Autowired
+    private CheckoutHelper checkoutHelper;
+
+    @Autowired
     private IOrderDetailsService orderDetailsService;
 
     @Override
     public OrderResponseDto createOrder(OrderDto orderDto, String username) {
         User currentLoggedUser = userHelper.findUserInSession(username);
+        List<CartItemSession> myCart = checkoutHelper.findAll(currentLoggedUser.getSid());
 
         Payment paymentFound = paymentHelper.findUserPayment(orderDto.getPayment().getId(), currentLoggedUser);
         Address addressFound = addressHelper.findUserAddress(orderDto.getAddress().getId(), currentLoggedUser);
@@ -50,8 +52,7 @@ public class OrderService implements IOrderService {
         Order newOrder = orderHelper.orderFromDto(orderDto);
         orderRepository.save(newOrder);
 
-        // Order Details - Delegate responsibility to Order Details Service
-        orderDetailsService.createOrders(newOrder, currentLoggedUser.getSid());
+        orderDetailsService.createOrders(newOrder, myCart);
 
         return orderHelper.orderResponseDto(newOrder);
     }
@@ -61,5 +62,11 @@ public class OrderService implements IOrderService {
         User currentLoggedUser = userHelper.findUserInSession(username);
         Order orderFound = orderHelper.findById(id, currentLoggedUser.getSid());
         return orderHelper.orderResponseDto(orderFound);
+    }
+
+    @Override
+    public List<Order> findAllOrders(String username) {
+        User currentLoggedUser = userHelper.findUserInSession(username);
+        return orderRepository.findAllByUserSid(currentLoggedUser.getSid());
     }
 }

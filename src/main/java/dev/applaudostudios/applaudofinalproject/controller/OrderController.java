@@ -19,6 +19,23 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
+    @GetMapping
+    public ResponseEntity<Object> getOrders(Principal principal) {
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        return ResponseHandler.responseBuilder("Orders found.",
+                HttpStatus.OK,
+                orderService.findAllOrders(username));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOrderById(Principal principal,
+                                               @PathVariable("id") Long id) {
+        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        return ResponseHandler.responseBuilder("Order found.",
+                HttpStatus.OK,
+                orderService.findOrderById(id, username));
+    }
+
     @PostMapping("/place-order")
     public ResponseEntity<Object> placeAnOrder(Principal principal,
                                                @Valid @RequestBody OrderDto orderDto) {

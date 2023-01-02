@@ -57,6 +57,15 @@ public class CheckoutHelper {
         return productFound.get();
     }
 
+    public List<CartItemSession> findAll(String sid) {
+        List<CartItemSession> myCart = checkoutRepository.findAllByUserSid(sid);
+        if (myCart.isEmpty()) {
+            throw new MyBusinessException("Cart is empty, you need at least 1 product to process the order.",
+                    HttpStatus.BAD_REQUEST);
+        }
+        return myCart;
+    }
+
     // Build DTO's
 
     public CartResponseDto myCartInformation(List<ICheckoutResponseDto> myCart, Double total) {

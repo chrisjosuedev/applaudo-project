@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Transactional
@@ -24,24 +26,21 @@ public class OrderDetailService implements IOrderDetailsService {
     private CheckoutRepository checkoutRepository;
 
     @Override
-    public void createOrders(Order order, String sid) {
-        List<CartItemSession> myCart = checkoutRepository.findAllByUserSid(sid);
-
-        if (myCart.isEmpty()) {
-            throw new MyBusinessException("Cart is empty, you need at least 1 product to process the order.",
-                    HttpStatus.BAD_REQUEST);
-        }
+    public void createOrders(Order order, List<CartItemSession> myCart) {
+        List<OrderDetail> myDetail = new LinkedList<>();
 
         myCart.forEach((cartItem) -> {
-            OrderDetail currentItem = OrderDetail.builder()
-                    .order(order)
-                    .product(cartItem.getProduct())
-                    .quantity(cartItem.getQuantity())
-                    .price(cartItem.getProduct().getUnitPrice())
-                    .build();
-            orderDetailRepository.save(currentItem);
+            myDetail.add(
+                    OrderDetail.builder()
+                            .order(order)
+                            .product(cartItem.getProduct())
+                            .quantity(cartItem.getQuantity())
+                            .price(cartItem.getProduct().getUnitPrice())
+                            .build()
+            );
         });
 
-        checkoutRepository.deleteAllByUserSid(sid);
+        orderDetailRepository.saveAll(myDetail);
+        checkoutRepository.deleteAllByUserSid(order.getUser().getSid());
     }
 }

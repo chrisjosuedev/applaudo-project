@@ -1,5 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public class Order {
     @Column
     private boolean status;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private User user;
 
@@ -47,7 +49,8 @@ public class Order {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "order")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "order")
     private List<OrderDetail> orderDetail = new ArrayList<>();
 
     public Order() {}
