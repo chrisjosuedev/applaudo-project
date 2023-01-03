@@ -54,6 +54,10 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment createPayment(PaymentDto paymentDto, String username) {
+        if (paymentHelper.findCcPayment(paymentDto.getCcNumber())) {
+            throw new MyBusinessException("Card already exists.", HttpStatus.BAD_REQUEST);
+        }
+
         User currentLoggedUser = userHelper.findUserInSession(username);
         PaymentType typeFound = paymentHelper.findPaymentType(paymentDto.getType().getId());
 
@@ -75,10 +79,13 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment updatePayment(Long id, PaymentDto paymentDto, String username) {
+        if (paymentHelper.findCcPayment(paymentDto.getCcNumber())) {
+            throw new MyBusinessException("Card already exists.", HttpStatus.BAD_REQUEST);
+        }
+
         User currentLoggedUser = userHelper.findUserInSession(username);
         PaymentType typeFound = paymentHelper.findPaymentType(paymentDto.getType().getId());
         Payment paymentFound = paymentHelper.findUserPayment(id, currentLoggedUser);
-
 
         Optional<Payment> currentDefaultPayment = paymentRepository.findPayment(currentLoggedUser.getSid());
 

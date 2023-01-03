@@ -31,6 +31,11 @@ public class PaymentHelper {
         return paymentFound.get();
     }
 
+    public boolean findCcPayment(String ccNumber) {
+        Optional<Payment> paymentFound = paymentRepository.findPaymentByCcNumber(ccNumber);
+        return paymentFound.isPresent();
+    }
+
     public Payment findPayment(User loggedUser) {
         Optional<Payment> paymentFound = paymentRepository.findPayment(loggedUser.getSid());
 

@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT u FROM Payment u WHERE u.isDefault = true AND u.user.sid = ?1")
     Optional<Payment> findPayment(String sid);
+    Optional<Payment> findPaymentByCcNumber(String ccNumber);
     List<Payment> findAllByUserSidAndStatusIsTrue(String sid);
     Optional<Payment> findByIdAndStatusIsTrueAndUserSid(Long id, String sid);
     List<Payment> findAllByUserSidAndStatusIsTrue(String sid, Pageable pageable);
