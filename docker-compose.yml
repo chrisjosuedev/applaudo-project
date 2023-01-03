@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  applaudo-project:
+    container_name: applaudo-project
+    restart: always
+    build: .
+    ports:
+      - "9090:9090"
+    environment:
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: root
+        SPRING_KEYCLOACK_TOKEN_URI: http://keycloack:8080/auth/realms/applaudoauth/protocol/openid-connect/token
+        SPRING_KEYCLOACK_AUTH_SERVER_URI: http://keycloack:8080/auth
+        SPRING_KEYCLOACK_LOGOUT_URI: http://keycloack:8080/auth/realms/applaudoauth/protocol/openid-connect/logout
+        MYSQL_HOST: mysqldb
+    depends_on:
+      - mysqldb
+      - keycloack
+
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    ports:
+      - "3307:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_PASSWORD: admin
+    restart: always
+    volumes:
+        - ./data:/var/lib/mysql
+
+  keycloack:
+    container_name: keycloack
+    image: quay.io/keycloak/keycloak:legacy
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin

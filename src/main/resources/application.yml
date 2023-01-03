@@ -17,15 +17,15 @@ spring:
             provider: "keycloak"
         provider:
           keycloak:
-            token-uri: "http://localhost:8180/auth/realms/applaudoauth/protocol/openid-connect/token"
+            token-uri: ${SPRING_KEYCLOACK_TOKEN_URI}
   datasource:
-      url: "jdbc:mysql://localhost:3306/db_applaudo?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
-      username: "root"
-      password: "admin"
+      url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/db_applaudo
+      username: ${SPRING_DATASOURCE_USERNAME:root}
+      password: ${SPRING_DATASOURCE_PASSWORD:root}
       driver-class-name: "com.mysql.cj.jdbc.Driver"
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 
 management:
@@ -36,13 +36,13 @@ management:
 
 keycloak:
   realm: applaudoauth
-  auth-server-url: http://localhost:8180/auth
+  auth-server-url: ${SPRING_KEYCLOACK_AUTH_SERVER_URI}
   resource: applaudo-keycloack
   public-client: true
   bearer-only: true
 
 variables:
   logout:
-    uri: "http://localhost:8180/auth/realms/applaudoauth/protocol/openid-connect/logout"
+    uri: ${SPRING_KEYCLOACK_LOGOUT_URI}
   TWILIO_ACCOUNT_SID: "AC6b743480d616119c6d1b9f4847a4d863"
   TWILIO_AUTH_TOKEN: "2f2870f50566835c35f825f6a73c457f"
