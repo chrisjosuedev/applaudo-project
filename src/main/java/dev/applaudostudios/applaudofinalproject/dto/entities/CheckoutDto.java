@@ -15,8 +15,8 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class CheckoutDto {
     @Column
-    @Positive(message = "Price must be greater than 0")
-    @NotNull(message = "Unit Price is required")
+    @Positive(message = "Quantity must be greater than 0")
+    @NotNull(message = "Quantity Price is required")
     private int quantity;
 
     @NotNull(message = "Product is required.")

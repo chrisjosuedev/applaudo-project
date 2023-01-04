@@ -5,7 +5,7 @@ import dev.applaudostudios.applaudofinalproject.dto.responses.PagResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
 import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.service.IUserService;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.jwt.JwtDecoder;
+import dev.applaudostudios.applaudofinalproject.helpers.jwt.JwtDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

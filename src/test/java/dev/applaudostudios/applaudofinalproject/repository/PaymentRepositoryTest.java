@@ -197,8 +197,8 @@ public class PaymentRepositoryTest {
     @DisplayName("JPA Implementations | Exceptions")
     class JpaImplementations {
         @Test
-        @DisplayName("Save an Payment with incorrect CC Number Length get Constraint Exceptions")
-        void givenProductData_WhenSavePaymentWithInvalidCcNumberLength_thenConstraintSetList() {
+        @DisplayName("Save a Payment with incorrect CC Number Length get Constraint Exceptions")
+        void givenPaymentData_WhenSavePaymentWithInvalidCcNumberLength_thenConstraintSetList() {
             Payment paymentTest = Payment.builder()
                     .ccNumber("fsdfsdfsdf")
                     .ccExpirationDate("2/24")
@@ -214,8 +214,8 @@ public class PaymentRepositoryTest {
         }
 
         @Test
-        @DisplayName("Save an Payment with incorrect Expiration Date get Constraint Exceptions")
-        void givenProductData_WhenSavePaymentWithInvalidDate_thenConstraintSetList() {
+        @DisplayName("Save a Payment with incorrect Expiration Date get Constraint Exceptions")
+        void givenPaymentData_WhenSavePaymentWithInvalidDate_thenConstraintSetList() {
             Payment paymentTest = Payment.builder()
                     .ccNumber("4363482640269342")
                     .ccExpirationDate("fsd")
@@ -231,8 +231,8 @@ public class PaymentRepositoryTest {
         }
 
         @Test
-        @DisplayName("Save an Payment with no Payment Type get Constraint Exceptions")
-        void givenProductData_WhenSavePaymentWithNullType_thenConstraintSetList() {
+        @DisplayName("Save a Payment with no Payment Type get Constraint Exceptions")
+        void givenPaymentData_WhenSavePaymentWithNullType_thenConstraintSetList() {
             PaymentDto paymentTest = PaymentDto.builder()
                     .ccNumber("4363482640269342")
                     .ccExpirationDate("3/25")

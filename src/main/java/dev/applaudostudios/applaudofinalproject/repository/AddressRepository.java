@@ -13,10 +13,7 @@ import java.util.Optional;
 public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("SELECT u FROM Address u WHERE u.isDefault = true AND u.user.sid = ?1")
     Optional<Address> findAddress(String sid);
-
-    List<Address> findAllByUserSidAndStatusIsTrue(String username);
-
     Optional<Address> findByIdAndStatusIsTrueAndUserSid(Long id, String sid);
-
+    List<Address> findAllByUserSidAndStatusIsTrue(String username);
     List<Address> findAllByUserSidAndStatusIsTrue(String sid, Pageable pageable);
 }

@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface CheckoutRepository extends JpaRepository<CartItemSession, Long> {
-
     List<CartItemSession> findAllByUserSid(String sid);
 
     @Query("SELECT c.product.id as productId, p.productName as productName, p.unitPrice as unitPrice, (p.unitPrice * c.quantity) as subTotal, c.quantity as quantity FROM CartItemSession c JOIN c.product p WHERE c.user.sid = ?1")

@@ -120,7 +120,7 @@ public class ProductRepositoryTest {
     @DisplayName("JPA Implementations | Exceptions")
     class JpaImplementations {
         @Test
-        @DisplayName("Save an Product with incorrect Stock get Constraint Exceptions")
+        @DisplayName("Save a Product with incorrect Stock get Constraint Exceptions")
         void givenProductData_WhenSaveProductWithInvalidStock_thenConstraintSetList() {
             Product productTest = Product.builder()
                     .productName("Product Name")
@@ -135,7 +135,7 @@ public class ProductRepositoryTest {
         }
 
         @Test
-        @DisplayName("Save an Product with Null Product Name and Description get Constraint Exceptions")
+        @DisplayName("Save a Product with Null Product Name and Description get Constraint Exceptions")
         void givenProductData_WhenSaveProductWithNullValues_thenConstraintSetList() {
             Product productTest = Product.builder()
                     .stock(32)
@@ -148,7 +148,7 @@ public class ProductRepositoryTest {
         }
 
         @Test
-        @DisplayName("Save an Product with incorrect Quantity get Constraint Exceptions")
+        @DisplayName("Save a Product with incorrect Quantity get Constraint Exceptions")
         void givenProductData_WhenSaveProductWithInvalidQuantity_thenConstraintSetList() {
             Product productTest = Product.builder()
                     .productName("Product Name")

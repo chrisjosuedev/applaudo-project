@@ -1,4 +1,4 @@
-package dev.applaudostudios.applaudofinalproject.utils.helpers.patterns;
+package dev.applaudostudios.applaudofinalproject.helpers.patterns;
 
 import lombok.*;
 import org.springframework.stereotype.Component;

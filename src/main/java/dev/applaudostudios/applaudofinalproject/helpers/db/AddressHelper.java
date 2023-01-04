@@ -1,4 +1,4 @@
-package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
+package dev.applaudostudios.applaudofinalproject.helpers.db;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.AddressDto;
 import dev.applaudostudios.applaudofinalproject.models.Address;

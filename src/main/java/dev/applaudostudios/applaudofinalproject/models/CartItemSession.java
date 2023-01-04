@@ -14,7 +14,6 @@ import javax.validation.constraints.Min;
 @AllArgsConstructor
 @Builder
 public class CartItemSession {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,4 +1,4 @@
-package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
+package dev.applaudostudios.applaudofinalproject.helpers.db;
 
 import dev.applaudostudios.applaudofinalproject.dto.responses.ICheckoutResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.OrderResponseDto;
@@ -7,7 +7,7 @@ import dev.applaudostudios.applaudofinalproject.models.payments.Payment;
 import dev.applaudostudios.applaudofinalproject.repository.OrderDetailRepository;
 import dev.applaudostudios.applaudofinalproject.repository.OrderRepository;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
-import dev.applaudostudios.applaudofinalproject.utils.helpers.patterns.MyMath;
+import dev.applaudostudios.applaudofinalproject.helpers.patterns.MyMath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
