@@ -2,6 +2,7 @@ package dev.applaudostudios.applaudofinalproject.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.applaudostudios.applaudofinalproject.models.payments.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

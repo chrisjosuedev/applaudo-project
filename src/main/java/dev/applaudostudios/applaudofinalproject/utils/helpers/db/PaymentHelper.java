@@ -1,8 +1,9 @@
 package dev.applaudostudios.applaudofinalproject.utils.helpers.db;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.PaymentDto;
-import dev.applaudostudios.applaudofinalproject.models.Payment;
-import dev.applaudostudios.applaudofinalproject.models.PaymentType;
+import dev.applaudostudios.applaudofinalproject.models.payments.CardType;
+import dev.applaudostudios.applaudofinalproject.models.payments.Payment;
+import dev.applaudostudios.applaudofinalproject.models.payments.PaymentType;
 import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.PaymentRepository;
 import dev.applaudostudios.applaudofinalproject.repository.PaymentTypeRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Component
 public class PaymentHelper {
@@ -20,6 +22,7 @@ public class PaymentHelper {
 
     @Autowired
     private PaymentTypeRepository paymentTypeRepository;
+
 
     public Payment findUserPayment(Long id, User loggedUser) {
         Optional<Payment> paymentFound = paymentRepository.findByIdAndStatusIsTrueAndUserSid(id, loggedUser.getSid());
@@ -34,6 +37,14 @@ public class PaymentHelper {
     public boolean findCcPayment(String ccNumber) {
         Optional<Payment> paymentFound = paymentRepository.findPaymentByCcNumber(ccNumber);
         return paymentFound.isPresent();
+    }
+
+    public String findProvider(String ccNumber) {
+        String provider = CardType.detect(ccNumber).toString();
+        if (provider.equals("UNKNOWN")) {
+            throw new MyBusinessException("Invalid credit card number.", HttpStatus.BAD_REQUEST);
+        }
+        return provider;
     }
 
     public Payment findPayment(User loggedUser) {

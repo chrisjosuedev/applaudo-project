@@ -143,7 +143,7 @@ public class UserRepositoryTest {
     }
 
     @Nested
-    @DisplayName("JPA Implementations")
+    @DisplayName("JPA Implementations | Exceptions")
     class JpaImplementations {
         @Test
         @DisplayName("Save an User with incorrect Email get Constraint Exceptions")

@@ -1,7 +1,9 @@
-package dev.applaudostudios.applaudofinalproject.models;
+package dev.applaudostudios.applaudofinalproject.models.payments;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.applaudostudios.applaudofinalproject.models.Order;
+import dev.applaudostudios.applaudofinalproject.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

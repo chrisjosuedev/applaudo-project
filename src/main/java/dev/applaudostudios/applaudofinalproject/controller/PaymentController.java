@@ -3,7 +3,7 @@ package dev.applaudostudios.applaudofinalproject.controller;
 import dev.applaudostudios.applaudofinalproject.dto.entities.PaymentDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.PagResponseDto;
 import dev.applaudostudios.applaudofinalproject.dto.responses.ResponseHandler;
-import dev.applaudostudios.applaudofinalproject.models.Payment;
+import dev.applaudostudios.applaudofinalproject.models.payments.Payment;
 import dev.applaudostudios.applaudofinalproject.service.IPaymentService;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.jwt.JwtDecoder;
 import org.springframework.beans.factory.annotation.Autowired;

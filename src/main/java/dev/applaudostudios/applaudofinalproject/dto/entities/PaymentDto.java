@@ -1,6 +1,6 @@
 package dev.applaudostudios.applaudofinalproject.dto.entities;
 
-import dev.applaudostudios.applaudofinalproject.models.PaymentType;
+import dev.applaudostudios.applaudofinalproject.models.payments.PaymentType;
 import dev.applaudostudios.applaudofinalproject.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,10 +16,7 @@ import javax.validation.constraints.Pattern;
 public class PaymentDto {
     @Length(min = 16, max = 19, message = "Account number must be between 16-19 characters.")
     private String ccNumber;
-
-    @NotBlank(message = "Provider is required.")
     private String provider;
-
     @NotBlank(message = "Expiration date is required.")
     @Pattern(regexp = "(?:0?[1-9]|1[0-2])/[0-9]{2}", message = "Invalid expiration date")
     private String ccExpirationDate;

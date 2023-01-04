@@ -1,6 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.applaudostudios.applaudofinalproject.models.payments.Payment;
 import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;

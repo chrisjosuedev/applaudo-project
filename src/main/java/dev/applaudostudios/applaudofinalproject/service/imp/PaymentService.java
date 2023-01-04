@@ -2,11 +2,11 @@ package dev.applaudostudios.applaudofinalproject.service.imp;
 
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.PaymentDto;
-import dev.applaudostudios.applaudofinalproject.models.Payment;
-import dev.applaudostudios.applaudofinalproject.models.PaymentType;
+import dev.applaudostudios.applaudofinalproject.models.payments.CardType;
+import dev.applaudostudios.applaudofinalproject.models.payments.Payment;
+import dev.applaudostudios.applaudofinalproject.models.payments.PaymentType;
 import dev.applaudostudios.applaudofinalproject.models.User;
 import dev.applaudostudios.applaudofinalproject.repository.PaymentRepository;
-import dev.applaudostudios.applaudofinalproject.repository.PaymentTypeRepository;
 import dev.applaudostudios.applaudofinalproject.service.IPaymentService;
 import dev.applaudostudios.applaudofinalproject.utils.exceptions.MyBusinessException;
 import dev.applaudostudios.applaudofinalproject.utils.helpers.db.PaymentHelper;
@@ -60,9 +60,11 @@ public class PaymentService implements IPaymentService {
 
         User currentLoggedUser = userHelper.findUserInSession(username);
         PaymentType typeFound = paymentHelper.findPaymentType(paymentDto.getType().getId());
+        String provider = paymentHelper.findProvider(paymentDto.getCcNumber());
 
         paymentDto.setUser(currentLoggedUser);
         paymentDto.setType(typeFound);
+        paymentDto.setProvider(provider);
 
         Payment newPayment = paymentHelper.paymentFromDto(paymentDto);
 
@@ -85,6 +87,8 @@ public class PaymentService implements IPaymentService {
 
         User currentLoggedUser = userHelper.findUserInSession(username);
         PaymentType typeFound = paymentHelper.findPaymentType(paymentDto.getType().getId());
+        String provider = paymentHelper.findProvider(paymentDto.getCcNumber());
+
         Payment paymentFound = paymentHelper.findUserPayment(id, currentLoggedUser);
 
         Optional<Payment> currentDefaultPayment = paymentRepository.findPayment(currentLoggedUser.getSid());
@@ -95,7 +99,7 @@ public class PaymentService implements IPaymentService {
         }
 
         paymentFound.setCcExpirationDate(paymentDto.getCcExpirationDate());
-        paymentFound.setProvider(paymentDto.getProvider());
+        paymentFound.setProvider(provider);
         paymentFound.setCcNumber(paymentDto.getCcNumber());
         paymentFound.setDefault(paymentFound.isDefault());
         paymentFound.setType(typeFound);

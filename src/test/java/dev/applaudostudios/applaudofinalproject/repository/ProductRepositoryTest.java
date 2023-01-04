@@ -67,9 +67,7 @@ public class ProductRepositoryTest {
         @Test
         @DisplayName("FindByProductName With Existing Product")
         void givenName_whenFindByProductNameWithAExistingProduct_thenProductIsPresent() {
-
             Optional<Product> productFound = productRepository.findByProductNameContainingIgnoreCase("camisa");
-
             assertTrue(productFound.isPresent());
             assertThat(productFound.get())
                     .usingRecursiveComparison()
@@ -119,7 +117,7 @@ public class ProductRepositoryTest {
     }
 
     @Nested
-    @DisplayName("JPA Implementations")
+    @DisplayName("JPA Implementations | Exceptions")
     class JpaImplementations {
         @Test
         @DisplayName("Save an Product with incorrect Stock get Constraint Exceptions")
