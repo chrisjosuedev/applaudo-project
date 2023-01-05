@@ -119,8 +119,6 @@ class ProductServiceTest {
             given(productRepository.save(product)).willReturn(product);
             given(objectNull.getObjectNull()).willReturn(Collections.emptyList());
 
-            product.setProductName(productDto.getProductName());
-
             Object removedProduct = productService.deleteProduct(product.getId());
 
             assertEquals(Collections.emptyList(), removedProduct);

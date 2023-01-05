@@ -1,5 +1,4 @@
 package dev.applaudostudios.applaudofinalproject.dto.responses;
-
 import java.util.Date;
 
 public interface IGeneralOrderResponse {
