@@ -191,7 +191,7 @@ class OrderRepositoryTest {
         @DisplayName("FindOrder by TrackNumber Delivery Status With Non Existing Track Number")
         void givenTrackNumber_WhenFindByTrackWithNonExistingTrackNumber_thenOrderIsNotPresent() {
             Optional<Order> myOrder = orderRepository.findByTrackNumAndUserSid(
-                    anyString(),
+                    "noexisting",
                     order.getUser().getSid());
             Assertions.assertTrue(myOrder.isEmpty());
         }
@@ -201,7 +201,7 @@ class OrderRepositoryTest {
         void givenTrackNumber_WhenFindByTrackWithNonExistingUser_thenOrderIsNotPresent() {
             Optional<Order> myOrder = orderRepository.findByTrackNumAndUserSid(
                     order.getTrackNum(),
-                    anyString()
+                    "noexisting"
             );
             Assertions.assertTrue(myOrder.isEmpty());
         }
@@ -234,7 +234,7 @@ class OrderRepositoryTest {
         void givenOrderId_WhenFindOrderByIdWithNonExistingUser_thenOrderIsNotPresent() {
             Optional<Order> myOrder = orderRepository.findByIdAndUserSid(
                     order.getId(),
-                    anyString()
+                    "noexisting"
             );
             Assertions.assertTrue(myOrder.isEmpty());
         }
@@ -250,7 +250,7 @@ class OrderRepositoryTest {
         @Test
         @DisplayName("FindOrders by Non Existing User Sid and Get List Empty")
         void givenUserSid_WhenFindOrderByNonExistingSid_thenOrderGeneralListEmpty() {
-            List<IGeneralOrderResponse> myOrders = orderRepository.findAllOrdersByUserSid(anyString());
+            List<IGeneralOrderResponse> myOrders = orderRepository.findAllOrdersByUserSid("noexisting");
             assertThat(myOrders.size()).isEqualTo(0);
         }
     }

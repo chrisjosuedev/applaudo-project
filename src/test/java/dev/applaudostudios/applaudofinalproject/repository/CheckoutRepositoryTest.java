@@ -119,7 +119,7 @@ class CheckoutRepositoryTest {
         @Test
         @DisplayName("FindCart by User ID with no cart and returns empty List")
         void givenCartItemSession_WhenFindAllWithNoExistingUserCart_thenCartListIsEmpty() {
-            List<CartItemSession> myCart = checkoutRepository.findAllByUserSid(anyString());
+            List<CartItemSession> myCart = checkoutRepository.findAllByUserSid("noexisting");
             assertThat(myCart.size()).isEqualTo(0);
         }
 
@@ -134,7 +134,7 @@ class CheckoutRepositoryTest {
         @Test
         @DisplayName("FindCart with Complete Information but Non Existing User")
         void givenCartItemSession_WhenFindAllWithInformationAndNonExistingUser_thenCartListIsEmpty() {
-            List<ICheckoutResponseDto> myCart = checkoutRepository.getCartInformation(anyString());
+            List<ICheckoutResponseDto> myCart = checkoutRepository.getCartInformation("noexisting");
             assertThat(myCart.size()).isEqualTo(0);
         }
 
@@ -148,7 +148,7 @@ class CheckoutRepositoryTest {
         @Test
         @DisplayName("FindSubTotal from CartItemSession Details and Non Existing User")
         void givenCartItemSession_WhenGetSubTotalAndNonExistingUser_thenReturnsNull() {
-            Double st = checkoutRepository.getCartTotal(anyString());
+            Double st = checkoutRepository.getCartTotal("noexisting");
             assertThat(st).isNull();
         }
 

@@ -1,6 +1,7 @@
 package dev.applaudostudios.applaudofinalproject.helpers.jwt;
 
 import dev.applaudostudios.applaudofinalproject.dto.entities.UserDto;
+import lombok.AllArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;

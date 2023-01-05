@@ -160,7 +160,7 @@ public class AddressRepositoryTest {
         @Test
         @DisplayName("FindAllByUserSid with an non existing User")
         void givenInvalidUserSid_WhenFindActiveCards_thenResturnEmptyList() {
-            List<Address> myAddresses = addressRepository.findAllByUserSidAndStatusIsTrue(anyString());
+            List<Address> myAddresses = addressRepository.findAllByUserSidAndStatusIsTrue("noexisting");
             assertThat(myAddresses.size()).isEqualTo(0);
         }
 

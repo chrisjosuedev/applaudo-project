@@ -124,7 +124,7 @@ public class PaymentRepositoryTest {
         @Test
         @DisplayName("FindCardByCcNumber with an non existing card")
         void givenCcNumber_WhenFindByCcNumberWithNonExistingCard_thenCardIsNotPresent() {
-            Optional<Payment> paymentFound = paymentRepository.findPaymentByCcNumber(anyString());
+            Optional<Payment> paymentFound = paymentRepository.findPaymentByCcNumber("noexisting");
             assertThat(paymentFound).isEmpty();
         }
 
@@ -188,7 +188,7 @@ public class PaymentRepositoryTest {
         @Test
         @DisplayName("FindAllByUserSid with an non existing User")
         void givenInvalidUserSid_WhenFindActiveCards_thenResturnEmptyList() {
-            List<Payment> myPayments = paymentRepository.findAllByUserSidAndStatusIsTrue(anyString());
+            List<Payment> myPayments = paymentRepository.findAllByUserSidAndStatusIsTrue("noexisting");
             assertThat(myPayments.size()).isEqualTo(0);
         }
     }

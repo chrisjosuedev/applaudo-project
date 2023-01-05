@@ -103,7 +103,7 @@ public class UserRepositoryTest {
         @Test
         @DisplayName("FindBySid with a Non Existing User")
         void givenSid_whenFindBySidWithANonExistingUser_thenUserIsNotPresent() {
-            Optional<User> userFoundBySid = userRepository.findBySid(anyString());
+            Optional<User> userFoundBySid = userRepository.findBySid("noexisting");
             assertThat(userFoundBySid).isNotPresent();
         }
 
@@ -122,7 +122,7 @@ public class UserRepositoryTest {
         @Test
         @DisplayName("FindByUsername with a Non Existing User")
         void givenUsername_whenFindBySidWithANonExistingUser_thenUserIsNotPresent() {
-            Optional<User> userFoundByUsername = userRepository.findByUsername(anyString());
+            Optional<User> userFoundByUsername = userRepository.findByUsername("noexisting");
             assertThat(userFoundByUsername).isNotPresent();
         }
 

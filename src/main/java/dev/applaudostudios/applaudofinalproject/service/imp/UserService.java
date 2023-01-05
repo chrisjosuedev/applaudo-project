@@ -22,7 +22,6 @@ public class UserService implements IUserService {
     private static final Logger logger = LoggerFactory.getLogger(JwtDecoder.class);
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserHelper userHelper;
 
@@ -43,7 +42,6 @@ public class UserService implements IUserService {
         if (userFound.isEmpty()) {
             throw new MyBusinessException("User not found with given username.", HttpStatus.NOT_FOUND);
         }
-
         return userHelper.userDtoResponse(userFound.get());
     }
 
@@ -52,13 +50,10 @@ public class UserService implements IUserService {
         UserDto userLogged = JwtDecoder.getUserInfo(token);
         Optional<User> userFound = userRepository.findBySid(userLogged.getSid());
         User newUser = userHelper.userFromToken(userLogged);
-
         if (userFound.isPresent() && !userFound.get().isStatus()) {
             newUser.setStatus(true);
         }
-
         userRepository.save(newUser);
-
         logger.info("User already exists, nothing added.");
     }
 
