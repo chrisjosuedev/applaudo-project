@@ -22,18 +22,21 @@ public class CheckoutController {
     @Autowired
     private ICheckoutService checkoutService;
 
+    @Autowired
+    private JwtDecoder jwtDecoder;
+
     @PostMapping
     public ResponseEntity<Object> createCheckout(Principal principal,
                                                  @Valid @RequestBody CheckoutDto checkoutDto) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
-        return ResponseHandler.responseBuilder("Item added to cart successfully",
+        String username = jwtDecoder.userCredentials(principal);
+        return ResponseHandler.responseBuilder("Item added to cart successfully.",
                 HttpStatus.CREATED,
                 checkoutService.addItemToCart(checkoutDto, username));
     }
 
     @GetMapping("/my-cart")
     public ResponseEntity<Object> getMyCart(Principal principal) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Current cart by user: " + username,
                 HttpStatus.OK,
                 checkoutService.findMyCart(username));
@@ -46,7 +49,7 @@ public class CheckoutController {
                                                  @PathVariable("quantity")
                                                  @Min(value = 0, message = "Quantity must be greater than 0.")
                                                  Integer quantity){
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Cart updated successfully.",
                 HttpStatus.OK,
                 checkoutService.updateCheckout(id, quantity, username));
@@ -55,7 +58,7 @@ public class CheckoutController {
     @DeleteMapping("/my-cart/product")
     public ResponseEntity<Object> deleteCheckout(Principal principal,
                                                  @RequestParam("id") Long id) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Product removed successfully.",
                 HttpStatus.OK,
                 checkoutService.deleteCheckout(id, username));
@@ -63,7 +66,7 @@ public class CheckoutController {
 
     @DeleteMapping("/my-cart")
     public ResponseEntity<Object> deleteMyCart(Principal principal) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Cart was removed successfully.",
                 HttpStatus.OK,
                 checkoutService.deleteAllCheckout(username));

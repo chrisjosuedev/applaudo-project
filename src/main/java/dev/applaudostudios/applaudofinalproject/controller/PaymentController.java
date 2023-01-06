@@ -25,6 +25,8 @@ public class PaymentController {
 
     @Autowired
     private IPaymentService paymentService;
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @GetMapping
     public ResponseEntity<Object> findAllPayments(
@@ -34,7 +36,7 @@ public class PaymentController {
             @RequestParam(required = false, name = "limit")
             @Positive(message = "From must be greater than 0.") Integer limit
     ) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
 
         List<Payment> allPayments = paymentService.findAll(from, limit, username);
 
@@ -50,7 +52,7 @@ public class PaymentController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> findPaymentById(Principal principal,
                                                   @PathVariable("id") Long id) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Payment Found.",
                 HttpStatus.OK,
                 paymentService.findPaymentById(id, username));
@@ -60,9 +62,9 @@ public class PaymentController {
     @PostMapping
     public ResponseEntity<Object> createPayment(
             Principal principal, @Valid @RequestBody PaymentDto paymentDto) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Payment created successfully.",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 paymentService.createPayment(paymentDto, username));
     }
 
@@ -70,7 +72,7 @@ public class PaymentController {
     public ResponseEntity<Object> updatePayment(Principal principal,
                                                 @PathVariable("id") Long id,
                                                 @Valid @RequestBody PaymentDto paymentDto) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Payment updated successfully.",
                 HttpStatus.OK,
                 paymentService.updatePayment(id, paymentDto, username));
@@ -80,7 +82,7 @@ public class PaymentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletePayment(Principal principal,
                                                 @PathVariable("id") Long id) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Payment removed successfully.",
                 HttpStatus.OK,
                 paymentService.deletePayment(id, username));

@@ -27,6 +27,9 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private JwtDecoder jwtDecoder;
+
     @RolesAllowed("ADMIN")
     @GetMapping
     public ResponseEntity<Object> findAllUsers(
@@ -54,7 +57,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<Object> updateUser(Principal principal,
                                              @Valid @RequestBody UserUpdateDto userUpdateDto) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("User updated successfully.",
                 HttpStatus.OK,
                 userService.updateUser(username, userUpdateDto));

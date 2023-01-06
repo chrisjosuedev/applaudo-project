@@ -17,6 +17,6 @@ public class UserUpdateDto {
     @NotBlank(message = "Last name is required.")
     private String lastName;
 
-    @Cellphone(message = "Invalid telephone number.")
+    @NotBlank(message = "Invalid telephone number.")
     private String telephone;
 }

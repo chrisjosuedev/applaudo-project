@@ -24,6 +24,8 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
     @Autowired
     private UserHelper userHelper;
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @Override
     public List<User> findAll(Integer limit, Integer from) {
@@ -47,7 +49,7 @@ public class UserService implements IUserService {
 
     @Override
     public void createUser(String token) {
-        UserDto userLogged = JwtDecoder.getUserInfo(token);
+        UserDto userLogged = jwtDecoder.getUserInfo(token);
         Optional<User> userFound = userRepository.findBySid(userLogged.getSid());
         User newUser = userHelper.userFromToken(userLogged);
         if (userFound.isPresent() && !userFound.get().isStatus()) {

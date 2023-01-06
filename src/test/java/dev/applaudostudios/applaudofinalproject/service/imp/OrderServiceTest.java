@@ -66,7 +66,6 @@ class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-
         user = User.builder()
                 .sid("1234")
                 .username("chrisjosuel")

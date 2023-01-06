@@ -18,10 +18,12 @@ public class OrderController {
 
     @Autowired
     private IOrderService orderService;
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @GetMapping
     public ResponseEntity<Object> getOrders(Principal principal) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Orders found.",
                 HttpStatus.OK,
                 orderService.findAllOrders(username));
@@ -30,7 +32,7 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOrderById(Principal principal,
                                                @PathVariable("id") Long id) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Order found.",
                 HttpStatus.OK,
                 orderService.findOrderById(id, username));
@@ -39,7 +41,7 @@ public class OrderController {
     @PostMapping("/place-order")
     public ResponseEntity<Object> placeAnOrder(Principal principal,
                                                @Valid @RequestBody OrderDto orderDto) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Order placed.",
                 HttpStatus.CREATED,
                 orderService.createOrder(orderDto, username));
@@ -47,8 +49,8 @@ public class OrderController {
 
     @PostMapping("/place-order/one-click")
     public ResponseEntity<Object> placeAnOrderByOneClick(Principal principal) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
-        return ResponseHandler.responseBuilder("Order placed.",
+        String username = jwtDecoder.userCredentials(principal);
+        return ResponseHandler.responseBuilder("Order One-Click placed.",
                 HttpStatus.CREATED,
                 orderService.createOneClickOrder(username));
     }
@@ -57,7 +59,7 @@ public class OrderController {
     public ResponseEntity<Object> updateDeliveryStatus(Principal principal,
                                                        @PathVariable("tracking_num") String trackNum,
                                                        @PathVariable("status") Boolean status) {
-        String username = JwtDecoder.userCredentials(principal).getPreferredUsername();
+        String username = jwtDecoder.userCredentials(principal);
         return ResponseHandler.responseBuilder("Updated order delivery status.",
                 HttpStatus.OK,
                 orderService.updateOrder(status, trackNum, username));

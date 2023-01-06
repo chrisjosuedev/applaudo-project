@@ -59,7 +59,7 @@ public class OrderHelper {
         Optional<Order> orderFound = orderRepository.findByIdAndUserSid(id, sid);
         if (orderFound.isEmpty()) {
             throw new MyBusinessException("User doesn't have and Order with given id.",
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_FOUND);
         }
         return orderFound.get();
     }
