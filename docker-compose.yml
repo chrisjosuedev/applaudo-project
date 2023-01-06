@@ -29,6 +29,7 @@ services:
     restart: always
     volumes:
         - ./data:/var/lib/mysql
+        - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   keycloack:
     container_name: keycloack
